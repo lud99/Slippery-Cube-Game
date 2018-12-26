@@ -31,8 +31,7 @@ public class GameManagerScript : MonoBehaviour {
         level = SceneManager.GetActiveScene().name;
         if (SceneManager.GetActiveScene().buildIndex > 1) sceneBuildIndex = SceneManager.GetActiveScene().buildIndex - 2;
         else sceneBuildIndex = SceneManager.GetActiveScene().buildIndex;
-        savePath = Application.dataPath + "/save.json";
-        Debug.Log(sceneBuildIndex);
+        savePath = Application.persistentDataPath + "/save.json";
 
         fade.SetActive(true); //Activate fade
 

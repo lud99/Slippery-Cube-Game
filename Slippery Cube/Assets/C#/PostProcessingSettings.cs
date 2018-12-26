@@ -7,7 +7,7 @@ public class PostProcessingSettings : MonoBehaviour
     PostProcessLayer layer;
 
     //Start of game
-    void Awake()
+    public void Awake()
     {
         DontDestroyOnLoad(this); //Be active in all scenes
         //Destroy other camera objects so there's only 1 camera

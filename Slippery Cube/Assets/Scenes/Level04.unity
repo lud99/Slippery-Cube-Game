@@ -88,7 +88,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ShowResolutionOverlay: 1
-  m_LightingDataAsset: {fileID: 112000002, guid: b47490221a5b0f24b929134f9c19e5a1,
+  m_LightingDataAsset: {fileID: 112000000, guid: b47490221a5b0f24b929134f9c19e5a1,
     type: 2}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -774,6 +774,16 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114698955316777360, guid: d16787e846833cd4c93844eaec89e244,
+        type: 3}
+      propertyPath: camHigh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114698955316777360, guid: d16787e846833cd4c93844eaec89e244,
+        type: 3}
+      propertyPath: camLow
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 224702237473183156, guid: d16787e846833cd4c93844eaec89e244,
         type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -793,16 +803,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.x
       value: 228.65
-      objectReference: {fileID: 0}
-    - target: {fileID: 114698955316777360, guid: d16787e846833cd4c93844eaec89e244,
-        type: 3}
-      propertyPath: camHigh
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 114698955316777360, guid: d16787e846833cd4c93844eaec89e244,
-        type: 3}
-      propertyPath: camLow
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 114716861730808070, guid: d16787e846833cd4c93844eaec89e244,
         type: 3}

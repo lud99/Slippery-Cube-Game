@@ -12,15 +12,14 @@ public class Settings : MonoBehaviour {
     PostProcessingSettings postSettings;
 
     //Start
-    void Awake()
+    void Start()
     {
         postSettings = Camera.main.GetComponent<PostProcessingSettings>();
 
         //Create PlayerPrefs files if none exists (settings)
-        if (!PlayerPrefs.HasKey("Graphics"))
+        if (!PlayerPrefs.HasKey("Quality"))
         {
-            PlayerPrefs.SetInt("Graphics", 0); //Graphics
-            PlayerPrefs.SetInt("PostProcessing", 0); //Post Processing
+            PlayerPrefs.SetInt("Quality", 0); //Graphics
             PlayerPrefs.SetInt("Physics", 60); //Physics
             PlayerPrefs.SetInt("FPSLimit", -1); //FPS Limit
             PlayerPrefs.SetInt("VSync", 0); //VSync
@@ -37,9 +36,9 @@ public class Settings : MonoBehaviour {
             PlayerPrefs.SetInt("AntiAliasing", 0); //AA
             PlayerPrefs.SetInt("Particles", 0); //Particles
             PlayerPrefs.SetInt("Lights", 0); //Lights
-            PlayerPrefs.SetFloat("MasterVolume", 0); //Master volume
-            PlayerPrefs.SetFloat("MusicVolume", 0); //Music volume
-            PlayerPrefs.SetFloat("SfxVolume", 0); //SFX volume
+            PlayerPrefs.SetFloat("MasterVolume", 0f); //Master volume
+            PlayerPrefs.SetFloat("MusicVolume", 0f); //Music volume
+            PlayerPrefs.SetFloat("SfxVolume", 0f); //SFX volume
             PlayerPrefs.SetInt("MenuMusic", 0); //Menu music
         }
         //Load settings from file when loading scene
@@ -165,7 +164,7 @@ public class Settings : MonoBehaviour {
     //Set Graphics Quality
     public void SetQuality (int qualityIndex)
     {
-        PlayerPrefs.SetInt("Graphics", qualityIndex);
+        PlayerPrefs.SetInt("Quality", qualityIndex);
         UpdateSettings();
     }
 
@@ -260,14 +259,15 @@ public class Settings : MonoBehaviour {
     public void ResetSettings()
     {
         PlayerPrefs.DeleteAll();
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name); //Reload scene to update UI
+        postSettings.Awake();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name); //Reload scene to update UI and apply settings
     }
 
     //Apply PostProcessing Settings
     void UpdateSettings()
     {
         //Apply Graphics
-        QualitySettings.SetQualityLevel(PlayerPrefs.GetInt("Graphics"));
+        QualitySettings.SetQualityLevel(PlayerPrefs.GetInt("Quality"));
         //Apply Vsync
         QualitySettings.vSyncCount = PlayerPrefs.GetInt("VSync");
         //Apply FPS Limit
@@ -294,8 +294,8 @@ public class Settings : MonoBehaviour {
         //Preset
         preset.GetComponent<Dropdown>().value = 3;
         //Graphics
-        graphics.GetComponent<Dropdown>().value = PlayerPrefs.GetInt("Graphics");
-        aa.GetComponent<Dropdown>().value = PlayerPrefs.GetInt("AA");
+        graphics.GetComponent<Dropdown>().value = PlayerPrefs.GetInt("Quality");
+        aa.GetComponent<Dropdown>().value = PlayerPrefs.GetInt("AntiAliasing");
         particles.GetComponent<Dropdown>().value = PlayerPrefs.GetInt("Particles");
         //Physics
         if (PlayerPrefs.GetInt("Physics") == 60) physics.GetComponent<Dropdown>().value = 0;

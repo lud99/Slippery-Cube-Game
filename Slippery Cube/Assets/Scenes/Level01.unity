@@ -211,7 +211,7 @@ BoxCollider:
   m_GameObject: {fileID: 359139035}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -281,13 +281,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1099881222348484, guid: 2a14005f448bec04a897de83ef63069b, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 4950758092159828, guid: 2a14005f448bec04a897de83ef63069b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 152.24
       objectReference: {fileID: 0}
     - target: {fileID: 4950758092159828, guid: 2a14005f448bec04a897de83ef63069b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.35
+      value: 2.63
       objectReference: {fileID: 0}
     - target: {fileID: 4950758092159828, guid: 2a14005f448bec04a897de83ef63069b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -312,6 +316,21 @@ PrefabInstance:
     - target: {fileID: 4950758092159828, guid: 2a14005f448bec04a897de83ef63069b, type: 3}
       propertyPath: m_RootOrder
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 20516403358232946, guid: 2a14005f448bec04a897de83ef63069b,
+        type: 3}
+      propertyPath: m_AllowMSAA
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 20516403358232946, guid: 2a14005f448bec04a897de83ef63069b,
+        type: 3}
+      propertyPath: m_OcclusionCulling
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5996286148816592209, guid: 2a14005f448bec04a897de83ef63069b,
+        type: 3}
+      propertyPath: antialiasingMode
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a14005f448bec04a897de83ef63069b, type: 3}
@@ -1590,6 +1609,11 @@ PrefabInstance:
         type: 3}
       propertyPath: bonusCoins
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224308791037450292, guid: d16787e846833cd4c93844eaec89e244,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -4.819916
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d16787e846833cd4c93844eaec89e244, type: 3}

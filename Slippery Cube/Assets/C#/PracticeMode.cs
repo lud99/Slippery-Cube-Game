@@ -5,12 +5,21 @@ public class PracticeMode : MonoBehaviour {
 
     Rigidbody rb;
     FollowPlayer FollowPlayerScript;
+    string savePath;
+
+    //Data to save
+    private class Data
+    {
+        public Vector3 practicePosition, practiceVelocity, practiceGravity, practiceCamera;
+        public Quaternion practiceRotation;
+    }
 
     //Get components
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         FollowPlayerScript = Camera.main.GetComponent<FollowPlayer>();
+        savePath = Application.persistentDataPath + "/practicesave.json";
         SaveCheckpoint(); //Set default checkpoint on start
     }
 
@@ -27,7 +36,7 @@ public class PracticeMode : MonoBehaviour {
         //If right mouse button is pressed (not hold)
         if (Input.GetButtonDown("Fire2")) //Load checkpoint
         {
-            if (GameObject.Find("CompleteLevelUI") == null && File.Exists(Application.dataPath + "/practicesave.json")) //Only load if level is not complete and
+            if (GameObject.Find("CompleteLevelUI") == null && File.Exists(savePath)) //Only load if level is not complete and
             {
                 LoadCheckpoint(); //Load Checkpoint
             }
@@ -40,13 +49,6 @@ public class PracticeMode : MonoBehaviour {
                 DeleteCheckpoint(); //Load Checkpoint
             }
         }
-    }
-
-    //Data to save
-    private class Data
-    {
-        public Vector3 practicePosition, practiceVelocity, practiceGravity, practiceCamera;
-        public Quaternion practiceRotation;
     }
 
     //Save checkpoint (Json)
@@ -63,7 +65,7 @@ public class PracticeMode : MonoBehaviour {
         data.practiceCamera = FollowPlayerScript.offset; //Camera
 
         string json = JsonUtility.ToJson(data); //Convert data to json
-        File.WriteAllText(Application.dataPath + "/practicesave.json", json); //Write data to file
+        File.WriteAllText(savePath, json); //Write data to file
     }
 
     //Delete checkpoint (Json)
@@ -80,14 +82,14 @@ public class PracticeMode : MonoBehaviour {
         data.practiceCamera = new Vector3(0, 0, 0); //Camera
 
         string json = JsonUtility.ToJson(data); //Convert data to json
-        File.WriteAllText(Application.dataPath + "/practicesave.json", json); //Write data to file
-        File.Delete(Application.dataPath + "/practicesave.json");
+        File.WriteAllText(savePath, json); //Write data to file
+        File.Delete(savePath);
     }
 
     //Load checkpoint (Json)
     Data LoadCheckpoint()
     {
-        string json = File.ReadAllText(Application.dataPath + "/practicesave.json"); //Read from file
+        string json = File.ReadAllText(savePath); //Read from file
         Data loadedData = JsonUtility.FromJson<Data>(json); //Convert json to data
 
         //Data to load
