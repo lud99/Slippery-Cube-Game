@@ -6,7 +6,10 @@ using UnityEngine.SceneManagement;
 public class Settings : MonoBehaviour {
 
     public AudioMixer audioMixer;
-    public GameObject preset, graphics, physics, vsync, fpsLimit, particles, lights, aa, colorGrading, dof, vignette, grain, bloom, motionBlur, masterSlider, musicSlider, sfxSlider, showCoins, showProgressBar, showDeaths, autoRestart, touchFeedback, autoNextLevel;
+    public GameObject preset, graphics, physics, vsync, fpsLimit, particles, lights, 
+    aa, colorGrading, ambientOcclusion, dof, vignette, grain, bloom, motionBlur, masterSlider, 
+    musicSlider, sfxSlider, showCoins, showProgressBar, showDeaths, autoRestart, touchFeedback, 
+    autoNextLevel;
     string qualityLevel, fpsLimitString, vsyncString, ppString;
     Camera cam;
     PostProcessingSettings postSettings;
@@ -24,6 +27,7 @@ public class Settings : MonoBehaviour {
             PlayerPrefs.SetInt("FPSLimit", -1); //FPS Limit
             PlayerPrefs.SetInt("VSync", 0); //VSync
             PlayerPrefs.SetInt("ColorGrading", 0); //ColorGrading
+            PlayerPrefs.SetInt("AmbientOcclusion", 0); //Ambient Occlusion
             PlayerPrefs.SetInt("AntiAliasing", 0); //AA
             PlayerPrefs.SetInt("MotionBlur", 0); //Motion Blur
             PlayerPrefs.SetInt("Vignette", 0); //Vignette
@@ -113,7 +117,7 @@ public class Settings : MonoBehaviour {
             Particles(0);
             SetQuality(preset);
             Lights(1);
-            VSync(1);
+            VSync(0);
         }
         if (preset == 2) //High
         {
@@ -121,7 +125,7 @@ public class Settings : MonoBehaviour {
             Particles(1);
             SetQuality(preset);
             Lights(1);
-            VSync(1);
+            VSync(0);
         }
         UpdateUI();
     }
@@ -132,6 +136,7 @@ public class Settings : MonoBehaviour {
         if (preset == 0) //Low
         {
             AA(0);
+            AmbientOcclusion(0);
             ColorGrading(0);
             Vignette(0);
             Grain(0);
@@ -142,6 +147,7 @@ public class Settings : MonoBehaviour {
         if (preset == 1) //Medium
         {
             AA(1);
+            AmbientOcclusion(1);
             ColorGrading(1);
             Vignette(1);
             Grain(1);
@@ -151,7 +157,8 @@ public class Settings : MonoBehaviour {
         }
         if (preset == 2) //High
         {
-            AA(2);
+            AA(3);
+            AmbientOcclusion(1);
             ColorGrading(1);
             Vignette(1);
             Grain(1);
@@ -173,6 +180,13 @@ public class Settings : MonoBehaviour {
     {
         PlayerPrefs.SetInt("AntiAliasing", aa);
         postSettings.AntiAliasing();
+    }
+
+    //Set Ambient Occlusion
+    public void AmbientOcclusion(int ao)
+    {
+        PlayerPrefs.SetInt("AmbientOcclusion", ao);
+        postSettings.AmbientOcclusion();
     }
 
     //Set Color grading
@@ -260,6 +274,7 @@ public class Settings : MonoBehaviour {
     {
         PlayerPrefs.DeleteAll();
         postSettings.Awake();
+        System.GC.Collect();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name); //Reload scene to update UI and apply settings
     }
 
@@ -296,6 +311,7 @@ public class Settings : MonoBehaviour {
         //Graphics
         graphics.GetComponent<Dropdown>().value = PlayerPrefs.GetInt("Quality");
         aa.GetComponent<Dropdown>().value = PlayerPrefs.GetInt("AntiAliasing");
+        ambientOcclusion.GetComponent<Dropdown>().value = PlayerPrefs.GetInt("AmbientOcclusion");
         particles.GetComponent<Dropdown>().value = PlayerPrefs.GetInt("Particles");
         //Physics
         if (PlayerPrefs.GetInt("Physics") == 60) physics.GetComponent<Dropdown>().value = 0;
@@ -322,3 +338,4 @@ public class Settings : MonoBehaviour {
         if (PlayerPrefs.GetInt("TouchFeedback") == 0) touchFeedback.GetComponent<Toggle>().isOn = false; else touchFeedback.GetComponent<Toggle>().isOn = true;
     }
 }
+

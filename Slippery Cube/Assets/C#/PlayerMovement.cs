@@ -2,20 +2,23 @@
 
 public class PlayerMovement : MonoBehaviour {
 
-    float heading = -90f, ScreenWidth, hinput;
-    public float forwardForce = 8000f, sidewayForce = 100f; //0.01 fixed timestep
+    float ScreenWidth, hinput;
+    public float forwardForce = 8000f, sidewayForce = 100f, camRotX = 0, camRotY = -90; //0.01 fixed timestep
     public Rigidbody rb;
-    public Vector3 gravity, camOffset;
+    public Vector3 gravity, camOffset, camForward, camRight;
     Transform cam;
+    FollowPlayer followPlayer;
 
     //Start
     void Start()
     {
-        cam = Camera.main.GetComponent<Transform>();
-        ScreenWidth = Screen.width;
-        Physics.gravity = gravity;
-        Camera.main.GetComponent<FollowPlayer>().Start(); //Set camera to find player
-        Camera.main.GetComponent<FollowPlayer>().offset = camOffset; //Set camera offset
+        cam = Camera.main.GetComponent<Transform>(); //Get camera transform
+        followPlayer = Camera.main.GetComponent<FollowPlayer>(); //Get follow player
+        ScreenWidth = Screen.width; //Get screen width
+        Physics.gravity = gravity; //Set gravity
+        followPlayer.Awake(); //Set camera to find player and set default rotation
+        camForward = cam.forward; //Set camera forward
+        camRight = cam.right; //Set camera right
 
         //Chane applied force depending on physics level
         //8000 ff, 100 sf = 0.02 (default)
@@ -43,22 +46,25 @@ public class PlayerMovement : MonoBehaviour {
             ++i;
         }
         if (Input.touchCount == 0) hinput = 0f; //Reset when not touching
-        //Set camera rotation
-        cam.rotation = Quaternion.Euler(0, heading, 0);
 
         //Check if player is falling of ground
         if (rb.position.y < 0f)
         {
             FindObjectOfType<GameManagerScript>().EndGame();
-            this.enabled = false;
+            enabled = false;
         }
     }
 
     //Update Physics
     void FixedUpdate()
     {
-        rb.AddForce(cam.transform.forward * forwardForce * Time.deltaTime);  //Add forward force in cameras front direction
-        if (Input.GetAxis("Horizontal") != 0) rb.AddForce(Input.GetAxis("Horizontal") * cam.transform.right * sidewayForce * Time.deltaTime, ForceMode.VelocityChange); //Add sideways force if button is down
-        if (hinput != 0) rb.AddForce(hinput * cam.transform.right * sidewayForce * Time.deltaTime, ForceMode.VelocityChange); //Add sideways force (touch / mobile)
+        //Add forward force in cameras front direction
+        rb.AddForce(camForward * forwardForce * Time.deltaTime);
+        //Add sideways force if button is down (normal horizontal axis)
+        if (Input.GetAxis("Horizontal") != 0) rb.AddForce(Input.GetAxis("Horizontal") * camRight  * sidewayForce * Time.deltaTime, ForceMode.VelocityChange);
+        //Add sideways force if button is down (numpad horizontal axis)
+        if (Input.GetAxis("Horizontal Numpad") != 0) rb.AddForce(Input.GetAxis("Horizontal Numpad") * camRight * sidewayForce * Time.deltaTime, ForceMode.VelocityChange);
+        //Add sideways force (touch / mobile)
+        if (hinput != 0) rb.AddForce(hinput * camRight * sidewayForce * Time.deltaTime, ForceMode.VelocityChange); 
     }
 }

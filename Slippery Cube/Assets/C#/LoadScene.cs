@@ -1,26 +1,71 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class LoadScene : MonoBehaviour {
+
+    GameManagerScript gMScript;
+    Animator fade;
+
+    //Start
+    void Start() {
+        gMScript = GameObject.Find("GameManager").GetComponent<GameManagerScript>();
+        fade = GameObject.Find("Fade").GetComponent<Animator>();
+    }
 
     //Load selected scene
     public void LoadSceneName(string scene)
     {
-        int sceneBuildIndex;
-        if (SceneManager.GetActiveScene().buildIndex > 1) sceneBuildIndex = SceneManager.GetActiveScene().buildIndex - 2;
-        else sceneBuildIndex = SceneManager.GetActiveScene().buildIndex;
-        GameManagerScript gMScript = GameObject.Find("GameManager").GetComponent<GameManagerScript>();
+        if (gMScript.completeLevelUI != null && gMScript.completeLevelUI.activeSelf) //If all bonus coins are added
+        {
+            if (gMScript.addCoinsDone) gMScript.LoadLevel(scene);
+        }
+        else gMScript.LoadLevel(scene);
+    }
 
-        //Remove local deaths
-        gMScript.SaveJson(sceneBuildIndex, gMScript.LoadJson().levelCoins[sceneBuildIndex], gMScript.LoadJson().levelDeaths[sceneBuildIndex], 0, gMScript.LoadJson().levelDone[sceneBuildIndex], -1, -1, -1); //Save
+    //Begin load selected scene async function
+    public void BeginLoadSceneNameAsync(string scene)
+    {
+        if (scene != "")
+        {
+            StartCoroutine(gMScript.BeginAsyncLoadLevel(scene));
+            fade.SetTrigger("FadeOutShortLoadScene");
+        }
+    }
 
-        SceneManager.LoadScene(scene);
+    //Load selected scene Async
+    public void LoadSceneNameAsync()
+    {
+        gMScript.AsyncLoadLevel();
+    }
+
+    //Begin Async Restart function
+    public void BeginAsyncRestart()
+    {
+        //Load current scene
+        StartCoroutine(gMScript.BeginAsyncRestart());
     }
 
     //Restart function
+    public void AsyncRestart()
+    {
+        //Async restart
+        gMScript.AsyncRestart();
+    }
+    //Restart function
     public void Restart()
     {
-        //Load current scene
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        if (gMScript.completeLevelUI != null && gMScript.completeLevelUI.activeSelf) //If level is complete
+        {
+            if (gMScript.addCoinsDone) gMScript.Restart(true); //Restart            
+        } else gMScript.Restart(false); //Restart            
+    }
+
+    //Next level function
+    public void NextLevel()
+    {
+        if (gMScript.addCoinsDone) //If all bonus coins are added
+        {
+            //Load next level
+            gMScript.LoadNextLevel();
+        }
     }
 }

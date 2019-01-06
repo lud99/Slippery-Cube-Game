@@ -20,7 +20,7 @@ public class PracticeMode : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
         FollowPlayerScript = Camera.main.GetComponent<FollowPlayer>();
         savePath = Application.persistentDataPath + "/practicesave.json";
-        SaveCheckpoint(); //Set default checkpoint on start
+        //SaveCheckpoint(); //Set default checkpoint on start
     }
 
     //Check for input

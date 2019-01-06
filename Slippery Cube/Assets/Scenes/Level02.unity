@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1551082842}
-  m_IndirectSpecularColor: {r: 0.48397493, g: 0.575722, b: 0.6801979, a: 1}
+  m_IndirectSpecularColor: {r: 0.48397553, g: 0.5757211, b: 0.6801981, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -344,6 +344,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114572543032584072, guid: d16787e846833cd4c93844eaec89e244,
+        type: 3}
+      propertyPath: m_Text
+      value: LEVEL 2
+      objectReference: {fileID: 0}
     - target: {fileID: 114698955316777360, guid: d16787e846833cd4c93844eaec89e244,
         type: 3}
       propertyPath: camLow
@@ -353,6 +358,11 @@ PrefabInstance:
         type: 3}
       propertyPath: camHigh
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 224974162226521386, guid: d16787e846833cd4c93844eaec89e244,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -23.199951
       objectReference: {fileID: 0}
     - target: {fileID: 1196851972297846, guid: d16787e846833cd4c93844eaec89e244, type: 3}
       propertyPath: m_IsActive
@@ -1397,6 +1407,8 @@ MonoBehaviour:
   disableShadows: 0
   disableLights: 1
   disableParticles: 0
+  disableRbDistanceInfront: 50
+  disableRbDistanceBehind: 10
   rb: {fileID: 0}
 --- !u!4 &926279439 stripped
 Transform:

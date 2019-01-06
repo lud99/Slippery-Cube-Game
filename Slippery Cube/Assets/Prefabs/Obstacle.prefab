@@ -4794,4 +4794,6 @@ MonoBehaviour:
   disableShadows: 0
   disableLights: 0
   disableParticles: 1
+  disableRbDistanceInfront: 50
+  disableRbDistanceBehind: 10
   rb: {fileID: 54282740520084812}

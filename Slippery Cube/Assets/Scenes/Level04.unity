@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1551082842}
-  m_IndirectSpecularColor: {r: 0.48397493, g: 0.575722, b: 0.6801979, a: 1}
+  m_IndirectSpecularColor: {r: 0.48397553, g: 0.5757211, b: 0.6801981, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -774,6 +774,16 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114716861730808070, guid: d16787e846833cd4c93844eaec89e244,
+        type: 3}
+      propertyPath: m_Text
+      value: Coins are optional
+      objectReference: {fileID: 0}
+    - target: {fileID: 114572543032584072, guid: d16787e846833cd4c93844eaec89e244,
+        type: 3}
+      propertyPath: m_Text
+      value: LEVEL 4
+      objectReference: {fileID: 0}
     - target: {fileID: 114698955316777360, guid: d16787e846833cd4c93844eaec89e244,
         type: 3}
       propertyPath: camHigh
@@ -783,6 +793,11 @@ PrefabInstance:
         type: 3}
       propertyPath: camLow
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 224974162226521386, guid: d16787e846833cd4c93844eaec89e244,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -23.199951
       objectReference: {fileID: 0}
     - target: {fileID: 224702237473183156, guid: d16787e846833cd4c93844eaec89e244,
         type: 3}
@@ -803,11 +818,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.x
       value: 228.65
-      objectReference: {fileID: 0}
-    - target: {fileID: 114716861730808070, guid: d16787e846833cd4c93844eaec89e244,
-        type: 3}
-      propertyPath: m_Text
-      value: Press Space during a level to quick restart
       objectReference: {fileID: 0}
     - target: {fileID: 224228729684941268, guid: d16787e846833cd4c93844eaec89e244,
         type: 3}
@@ -3244,6 +3254,8 @@ MonoBehaviour:
   disableShadows: 0
   disableLights: 1
   disableParticles: 0
+  disableRbDistanceInfront: 50
+  disableRbDistanceBehind: 10
   rb: {fileID: 0}
 --- !u!4 &1787528487 stripped
 Transform:

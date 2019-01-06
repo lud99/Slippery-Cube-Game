@@ -13,33 +13,38 @@ public class CompleteLevelUI : MonoBehaviour {
     int levelCoins, addedCoins, coins, sceneBuildIndex;
 
     //Start
-    void Start () {
+    void Awake () {
         //Find objects
         coinText = GameObject.Find("CoinText").GetComponent<CoinText>(); //Collected coins
         coinTotal = GameObject.Find("CoinTotal").GetComponent<Text>(); //Coin text
         deathText = GameObject.Find("DeathTotal").GetComponent<Text>(); //Death text
         gMScript = GameObject.Find("GameManager").GetComponent<GameManagerScript>(); //GameManager
 
+        //Set animation to not done
+        gMScript.completeLevelDone = false;
+        gMScript.addCoinsDone = false;
+
         //Get and display deaths
-        sceneBuildIndex = SceneManager.GetActiveScene().buildIndex;
+        if (SceneManager.GetActiveScene().buildIndex > 1) sceneBuildIndex = SceneManager.GetActiveScene().buildIndex - 2;
+        else sceneBuildIndex = SceneManager.GetActiveScene().buildIndex;
         deathText.GetComponent<Text>().text = gMScript.LoadJson().localDeaths.ToString();
 
         if (levelComplete)
         {
             //Display coins
-            coinTotal.GetComponent<Text>().text = "Coins: " + coinText.coins.ToString() + " / " + coinText.levelCoins.ToString();
+            coinTotal.GetComponent<Text>().text = coinText.coins.ToString() + " / " + coinText.levelCoins.ToString();
         }
         if (worldComplete)
         {
             //Display coins
             levelCoins = coinText.levelCoins + bonusCoins; //Get level coins + extra coins
             coins = coinText.coins;
-            coinTotal.GetComponent<Text>().text = "Coins: " + coinText.coins.ToString() + " / " + levelCoins.ToString();
+            coinTotal.GetComponent<Text>().text = coinText.coins.ToString() + " / " + levelCoins.ToString();
 
             //Save (bonus coins)
             if (coins > gMScript.LoadJson().levelCoins[sceneBuildIndex] - bonusCoins) //Only save if coins are higher than ones stored 
             {
-                gMScript.SaveJson(sceneBuildIndex, coins + bonusCoins, gMScript.LoadJson().levelDeaths[sceneBuildIndex], gMScript.LoadJson().localDeaths, true, -1, -1, -1);
+                gMScript.SaveJson(sceneBuildIndex, coins + bonusCoins, -1, -1, true, -1, -1, -1);
             }
         }
     }
@@ -65,7 +70,7 @@ public class CompleteLevelUI : MonoBehaviour {
         {
             coins += 1;
             addedCoins += 1;
-            coinTotal.GetComponent<Text>().text = "Coins: " + coins.ToString() + " / " + levelCoins.ToString();
+            coinTotal.GetComponent<Text>().text = coins.ToString() + " / " + levelCoins.ToString();
             GetComponent<AudioSource>().Play();
             yield return new WaitForSeconds(0.1f);
         }

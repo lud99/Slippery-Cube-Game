@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class WorldUIText : MonoBehaviour {
+public class WorldUI : MonoBehaviour {
 
     //Variables
     public GameObject deathText, coinText;
@@ -10,6 +10,7 @@ public class WorldUIText : MonoBehaviour {
 
     public string worldCoins;
     public string[] levels;
+    public int world;
 
     int coins, deaths;
     bool toggle = true;
@@ -18,14 +19,15 @@ public class WorldUIText : MonoBehaviour {
     void Start()
     {
         gMScript = GameObject.Find("GameManager").GetComponent<GameManagerScript>(); //Get GameManager
+
         //Get stored coins from world and display them
-        for (int i = 0; i < gMScript.levels.Length; i++)
+        for (int i = world * 10; i < levels.Length + (world * 10); i++)
         {
             coins += gMScript.LoadJson().levelCoins[i]; //Get coins
             deaths += gMScript.LoadJson().levelDeaths[i]; //Get deaths
         }
 
-        //Print
+        //Update text
         coinText.GetComponent<Text>().text = coins.ToString() + " / " + worldCoins;
         deathText.GetComponent<Text>().text = deaths.ToString();
 

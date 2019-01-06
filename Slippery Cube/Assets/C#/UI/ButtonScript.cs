@@ -3,7 +3,7 @@
 public class ButtonScript : MonoBehaviour {
 
     public GameObject[] EnableUI, DisableUI;
-    public int levelBuildIndex;
+    //public int levelBuildIndex;
     GameManagerScript gMScript;
 
     //Init some vars
@@ -12,14 +12,14 @@ public class ButtonScript : MonoBehaviour {
         gMScript = GameObject.Find("GameManager").GetComponent<GameManagerScript>();
     }
 
-    //Lock level
+    /*/Lock level
     void Update()
     {
         if (levelBuildIndex != 0 && !gMScript.LoadJson().levelDone[levelBuildIndex - 2])
         {
             this.gameObject.SetActive(false);
         }
-    }
+    }*/
 
     //Exit Application
     public void QuitGame()

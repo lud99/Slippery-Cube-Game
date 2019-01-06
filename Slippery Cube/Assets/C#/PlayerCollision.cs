@@ -2,10 +2,12 @@
 
 public class PlayerCollision : MonoBehaviour
 {
-
     public PlayerMovement movement;
     GameObject player;
-    Rigidbody player_rb;
+    GameManagerScript gMScript;
+
+    //Get game manager
+    void Start() { gMScript = GameObject.Find("GameManager").GetComponent<GameManagerScript>(); }
 
     //When colliding with something
     void OnCollisionEnter(Collision collisionInfo)
@@ -13,8 +15,9 @@ public class PlayerCollision : MonoBehaviour
         //Obstacle
         if (collisionInfo.collider.tag == "Obstacle")
         {
-            movement.enabled = false;
-            GameObject.Find("GameManager").GetComponent<GameManagerScript>().EndGame();
+            movement.enabled = false; //Disable movement
+            GetComponent<PracticeMode>().enabled = false; //Disable practice mode
+            GameObject.Find("GameManager").GetComponent<GameManagerScript>().EndGame(); //End game
         }
     }
 
@@ -26,52 +29,51 @@ public class PlayerCollision : MonoBehaviour
             case "Coin": //Coin
                 {
                     //Destroy and add coin
-                    GetComponent<AudioSource>().Play();
-                    Destroy(other.gameObject);
-                    GameObject coinTxt = GameObject.Find("CoinText");
-                    if (coinTxt != null) coinTxt.GetComponent<CoinText>().addCoin();
+                    GetComponent<AudioSource>().Play(); //Play coins sound
+                    Destroy(other.gameObject); //Destroy coin
+                    GameObject coinTxt = GameObject.Find("CoinText"); //Get coin text
+                    if (coinTxt != null) coinTxt.GetComponent<CoinText>().AddCoin(); //If coin text is found add coin
                     break;
                 }
             case "Obstacle": //Death trigger
                 {
-                    movement.enabled = false;
-                    GetComponent<PracticeMode>().enabled = false;
+                    Debug.Log("Obstacle");
+                    movement.enabled = false; //Disable movement
+                    GetComponent<PracticeMode>().enabled = false; //Disable practice mode
                     FindObjectOfType<GameManagerScript>().EndGame(); //Restart Scene
                     break;
                 }
-            case "Normal Pad": //Normal Pad
+            case "Movement Pad": //Change Movement
                 {
-                    //Normal movement
-                    float physics = 1f / PlayerPrefs.GetInt("Physics") * 100f;
-                    movement.forwardForce = 8000f / physics;
-                    movement.sidewayForce = 100f;
+                    Pad pad = other.GetComponent<Pad>(); //Get Pad component
+                    float physics = 1f / PlayerPrefs.GetInt("Physics") * 100f; //Get fixed timestep
+                    movement.forwardForce = pad.forwardForce / physics; //Change forward force
+                    movement.sidewayForce = pad.sidewayForce; //Change sideway force
                     break;
                 }
-            case "Stop Pad": //Stop Pad
+            case "Reset Rotation": //Change Player Rotation
                 {
-                    //Stop movement
-                    movement.forwardForce = 0f;
-                    movement.sidewayForce = 0f;
-                    break;
-                }
-            case "Reset Rotation": //Reset Player Rotation
-                {
-                    player = GameObject.Find("Player");
-                    player_rb = player.GetComponent<Rigidbody>();
+                    Rigidbody rb = GetComponent<Rigidbody>();
                     //Freeze rotation
-                    player_rb.freezeRotation = true;
-                    player.transform.rotation = Quaternion.identity;
-                    player_rb.freezeRotation = false;
+                    rb.freezeRotation = true;
+                    transform.rotation = other.GetComponent<Pad>().playerRotation;
+                    rb.freezeRotation = false;
                     break;
                 }
-            case "Grav Pad": //Change Gravity Pad
+            case "Grav Pad": //Change Gravity
                 {
-                    Physics.gravity = other.GetComponent<PadGravity>().gravity; //Reverse gravity for all objects
+                    Physics.gravity = other.GetComponent<Pad>().gravity; //Reverse gravity for all objects
                     break;
                 }
-            case "Cam Pad":
+            case "Cam Pad": //Change Camera Offset
                 {
-                    Camera.main.GetComponent<FollowPlayer>().offset = other.GetComponent<PadGravity>().offset; //Change camera offset
+                    Pad pad = other.GetComponent<Pad>(); //Get pad
+                    FollowPlayer followPlayer = Camera.main.GetComponent<FollowPlayer>(); //Get follow player
+                    followPlayer.offset = pad.offset; //Change camera offset
+                    followPlayer.targetRotation = pad.cameraRotation; //Set camera target rotation
+                    followPlayer.rotate = pad.rotateCam; //Set camera to rotate
+                    followPlayer.camForward = pad.camForward;
+                    followPlayer.camRight = pad.camRight;
                     break;
                 }
         }

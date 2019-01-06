@@ -8,12 +8,10 @@ TagManager:
   - Coin
   - Ground
   - Music
-  - Normal Pad
-  - Stop Pad
   - Reset Rotation
   - Grav Pad
   - Cam Pad
-  - PlayerBox
+  - Movement Pad
   layers:
   - Default
   - TransparentFX

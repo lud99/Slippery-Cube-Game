@@ -9,6 +9,7 @@ public class Music : MonoBehaviour
     public AudioClip[] music;
     public GameObject dropdown;
     GameManagerScript gMScript;
+    public bool changeMusic = false;
 
     //Start
     void Start()
@@ -26,10 +27,10 @@ public class Music : MonoBehaviour
         if (dropdown == null) dropdown = GameObject.Find("MenuMusicDropdown");
 
         //Stop current music
-        audioSource.Stop();
+        //audioSource.Stop();
         if (menuMusic == 0) //If random music is selected
         {
-            audioSource.clip = music[RandomMusic()]; //Generate rendom number & Play choosen song
+            audioSource.clip = music[RandomMusic()]; //Generate random number & Play choosen song
         }
         else //If specific music is selected
         {
@@ -84,10 +85,11 @@ public class Music : MonoBehaviour
                     audioSource.Play();
                 }
             }
-            if (scene == "TitleScreen" || scene == "LevelSelect") //If on title screen or level select
+            if (scene == "TitleScreen" || scene == "LevelSelect new") //If on title screen or level select
             {
-                if (!audioSource.isPlaying) //Only play music when no music is played (no music stacking) and stop other tracks that are not world 1
+                if (!audioSource.isPlaying || changeMusic) //Only play music when no music is played (no music stacking) and stop other tracks that are not world 1
                 {
+                    changeMusic = false;
                     SelectMenuMusic(PlayerPrefs.GetInt("MenuMusic")); //Select menu music from stored preference
                     audioSource.Play();
                 }

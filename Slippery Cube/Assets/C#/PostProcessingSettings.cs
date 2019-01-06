@@ -17,8 +17,9 @@ public class PostProcessingSettings : MonoBehaviour
         volume = GetComponent<PostProcessVolume>();
         layer = GetComponent<PostProcessLayer>();
 
-        //Update all post processing effects
+        //Update all post processing effects on start
         AntiAliasing();
+        AmbientOcclusion();
         ColorGrading();
         Bloom();
         Vignette();
@@ -43,7 +44,14 @@ public class PostProcessingSettings : MonoBehaviour
         //TAA
         else if (PlayerPrefs.GetInt("AntiAliasing") == 3) layer.antialiasingMode = PostProcessLayer.Antialiasing.TemporalAntialiasing;
     }
-
+    //Update Ambient Occlusion
+    public void AmbientOcclusion()
+    {
+        AmbientOcclusion ambientOcclusionLayer;
+        volume.profile.TryGetSettings(out ambientOcclusionLayer);
+        //Enable or disable
+        if (PlayerPrefs.GetInt("AmbientOcclusion") == 0) ambientOcclusionLayer.enabled.value = false; else ambientOcclusionLayer.enabled.value = true;
+    }
     //Update Color grading
     public void ColorGrading()
     {

@@ -5,21 +5,31 @@ public class CoinText : MonoBehaviour
 {
 
     public Text coinText;
+    public GameObject coinImage;
     public int levelCoins, coins = 0;
 
     //Count coins in current level
     void Start ()
     {
-        if (PlayerPrefs.GetInt("ShowCoins") == 0) coinText.text = "";
-        levelCoins = GameObject.FindGameObjectsWithTag("Coin").Length;
-        if (coinText.text != "") coinText.text = "Coins: " + coins.ToString() + " / " + levelCoins.ToString();
+        levelCoins = GameObject.FindGameObjectsWithTag("Coin").Length; //Get number of coins in level
+
+        if (PlayerPrefs.GetInt("ShowCoins") == 0) //If coin counter is disabled
+        {
+            coinText.text = "";
+            coinImage.SetActive(false);
+        }
+        else
+        {
+            coinText.text = coins.ToString() + " / " + levelCoins.ToString();
+            coinImage.SetActive(true);
+        }
     }
 
     //Add coins and update UI
-    public void addCoin()
+    public void AddCoin()
     {
         coins += 1;
-        if (coinText.text != "") coinText.text = "Coins: " + coins.ToString() + " / " + levelCoins.ToString();
+        if (coinText.text != "") coinText.text = coins.ToString() + " / " + levelCoins.ToString();
         GameObject.Find("Player").GetComponent<ParticleSystem>().Play();
     }
 }

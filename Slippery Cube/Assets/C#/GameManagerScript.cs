@@ -1,17 +1,19 @@
 ﻿using System.IO;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManagerScript : MonoBehaviour {
 
     //Variables
-    bool gameHasEnded = false;
+    public bool gameHasEnded = false;
     int coins, sceneBuildIndex;
     string level, savePath;
 
     GameObject coinText;
+    AsyncOperation asyncRestart, asyncLoadNextLevel, asyncLoadLevel;
     public GameObject fade, completeLevelUI;
-    public bool completeLevelDone, addCoinsDone = false;
+    public bool completeLevelDone = true, addCoinsDone = true;
     public int currentCoins, spentCoins;
     public string[] levels;
 
@@ -19,8 +21,8 @@ public class GameManagerScript : MonoBehaviour {
     public class Data
     {
         public int localDeaths = 0, currentCoins = 0, spentCoins = 0, gamemode = 0;
-        public int[] levelCoins = new int[12], levelDeaths = new int[12];
-        public bool[] levelDone = new bool[12];
+        public int[] levelCoins = new int[20], levelDeaths = new int[20];
+        public bool[] levelDone = new bool[20];
     }
 
     //Activate Fade
@@ -33,6 +35,9 @@ public class GameManagerScript : MonoBehaviour {
         else sceneBuildIndex = SceneManager.GetActiveScene().buildIndex;
         savePath = Application.persistentDataPath + "/save.json";
 
+        //Camera.main.GetComponent<Screenshot>().Awake(); //Run camera awake on new scene
+        Camera.main.GetComponent<FollowPlayer>().Awake(); //Run camera awake on new scene
+
         fade.SetActive(true); //Activate fade
 
         //If savefile doesn't exist
@@ -43,49 +48,45 @@ public class GameManagerScript : MonoBehaviour {
             string json = JsonUtility.ToJson(data); //Convert data to json
             File.WriteAllText(savePath, json); //Write data to file
             Debug.Log("Created new savefile");
-            Restart();
+            Restart(false);
         }
+
         //Game modes
         GameObject player = GameObject.Find("Player");
         if (LoadJson().gamemode == 0)
         {
-            if (player != null) player.GetComponent<PracticeMode>().enabled = true; //Activate practice mode script
+            if (player != null) player.GetComponent<PracticeMode>().enabled = false; //Activate practice mode script
         }
         if (LoadJson().gamemode == 1)
         {
-            if (player != null) player.GetComponent<PracticeMode>().enabled = false; //Disable practice mode script
+            if (player != null) player.GetComponent<PracticeMode>().enabled = true; //Disable practice mode script
         }
-
         CurrentCoins();
     }
 
     //Update   
     void Update()
     {
-        //Debug.Log("Screen width: " + Screen.width);
-        //Debug.Log("Screen height: " + Screen.height);
         //Restart level
-        if (Input.GetButton("Restart") && !gameHasEnded)
+        if (Input.GetButtonDown("Restart") && !gameHasEnded)
         {
-            if (!completeLevelUI.activeSelf && !completeLevelDone) //If level is not complete
+            if (!completeLevelUI.activeSelf && !completeLevelDone) //If level is not complete (quick restarting)
             {
                 SaveJson(sceneBuildIndex, -1, LoadJson().levelDeaths[sceneBuildIndex] + 1, LoadJson().localDeaths + 1, LoadJson().levelDone[sceneBuildIndex], -1, -1, -1); //Save
-                Restart();
+                fade.GetComponent<Animator>().SetTrigger("FadeOutShort");
             }
-            if (completeLevelUI.activeSelf && completeLevelDone && addCoinsDone) //If level is completed
+            if (completeLevelUI.activeSelf && completeLevelDone && addCoinsDone) //If level is completed, complete level animation is done and all bonus coins are added
             {
-                //Remove local deaths
-                SaveJson(sceneBuildIndex, -1, -1, 0, LoadJson().levelDone[sceneBuildIndex], -1, -1, -1); //Save
-                Restart();
+                Restart(true); //Restart and remove local deaths
             }
         }
         //Go to next level
-        if (Input.GetButton("NextLevel") && completeLevelDone && addCoinsDone)
+        if (Input.GetButtonDown("NextLevel") && completeLevelDone && addCoinsDone)
         {
             LoadNextLevel();
         }
         //Pause menu and exiting level
-        if (Input.GetButton("Cancel"))
+        if (Input.GetButtonDown("Cancel"))
         {
             if (level == "LevelSelect") //If on level select
             {
@@ -95,6 +96,12 @@ public class GameManagerScript : MonoBehaviour {
             {
                 LoadLevel("LevelSelect");
             }
+        }
+
+        //Take screenshot
+        if (Input.GetButtonDown("Screenshot"))
+        {
+            Screenshot.TakeScreenshot_Static(Screen.width, Screen.height);
         }
     }
 
@@ -122,19 +129,30 @@ public class GameManagerScript : MonoBehaviour {
     //Load saved data
     public Data LoadJson()
     {
-        string json = File.ReadAllText(savePath); //Read from file
-        Data loadedData = JsonUtility.FromJson<Data>(json); //Convert json to data
-        return loadedData;
+        if (File.Exists(savePath)) //If save file exists
+        {
+            string json = File.ReadAllText(savePath); //Read from file
+            Data loadedData = JsonUtility.FromJson<Data>(json); //Convert json to data
+            return loadedData;
+        } else if (!File.Exists(savePath) || (File.Exists(savePath) && new FileInfo(savePath).Length == 0))
+        {
+            Data defaultData = new Data();
+            return defaultData;
+        }
+        Data someData = new Data();
+        return someData;
     }
 
     //Delete saved data
     public void DeleteJson()
     {
-        File.Delete(savePath);
+        File.Delete(savePath); //Delete save file
+        PlayerPrefs.SetInt("MenuMusic", 0); //Reset menu music
+        GameObject.Find("Music").GetComponent<Music>().SelectMenuMusic(0);
         //If delete was succesfull
         if (!File.Exists(savePath)) Debug.Log("Save file has been succesfully deleted"); 
         else Debug.Log("Save file could not be deleted");
-        Restart();
+        Restart(false); //Restart
     }
 
     //Complete Level function
@@ -144,6 +162,9 @@ public class GameManagerScript : MonoBehaviour {
         {
             //Start Complete Level animation
             completeLevelUI.SetActive(true);
+
+            //Start loading current level and next level
+            StartCoroutine(BeginAsyncLoadNextLevel());
 
             //Update save variables
             coins = coinText.GetComponent<CoinText>().coins;
@@ -189,31 +210,97 @@ public class GameManagerScript : MonoBehaviour {
         }
     }
 
-    //Restart function
-    void Restart()
+    //Load current scene ahead of time
+    public IEnumerator BeginAsyncRestart()
     {
-        //Load current scene
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        asyncRestart = SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name);
+        asyncRestart.allowSceneActivation = false;
+        yield return asyncRestart;
+    }
+
+    //Load next scene ahead of time
+    public IEnumerator BeginAsyncLoadNextLevel()
+    {
+        asyncLoadNextLevel = SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
+        asyncLoadNextLevel.allowSceneActivation = false;
+        yield return asyncLoadNextLevel;
+    }
+
+    //Load selected scene ahead of time
+    public IEnumerator BeginAsyncLoadLevel(string scene)
+    {
+        asyncLoadLevel = SceneManager.LoadSceneAsync(scene);
+        asyncLoadLevel.allowSceneActivation = false;
+        yield return asyncLoadLevel;
+    }
+
+    //Async Restart
+    public void AsyncRestart()
+    {
+        System.GC.Collect();
+
+        //If async loading is not done
+        if (asyncRestart.progress < 0.8)
+        {
+            Debug.Log("Cannot restart");
+            Restart(false); //Restart
+        }
+        //Set to switch to async loaded scene
+        asyncRestart.allowSceneActivation = true;
+    }
+
+    //Normal Restart
+    public void Restart(bool removeLocalDeaths)
+    {
+        System.GC.Collect();
+
+        if (removeLocalDeaths) SaveJson(sceneBuildIndex, -1, -1, 0, LoadJson().levelDone[sceneBuildIndex], -1, -1, -1); //Remove local deaths
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name); //Restart
+    }
+
+    //Async load level
+    public void AsyncLoadLevel()
+    {
+        System.GC.Collect();
+
+        //If async loading is not done
+        if (asyncLoadLevel.progress < 0.8)
+        {
+            Debug.Log("Cannot load level");
+        }
+        //Set to switch to async loaded scene
+        asyncLoadLevel.allowSceneActivation = true;
     }
 
     //Load next level
-    void LoadNextLevel()
+    public void LoadNextLevel()
     {
         //Remove local deaths
         SaveJson(sceneBuildIndex, -1, -1, 0, LoadJson().levelDone[sceneBuildIndex], -1, -1, -1); //Save
 
-        //Load next scene
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        System.GC.Collect();
+
+        //If async loading is not done
+        if (asyncLoadNextLevel.progress < 0.8)
+        {
+            Debug.Log("Cannot load next level");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1); //Load next level
+        }
+        //Set to switch to async loaded scene
+        asyncLoadNextLevel.allowSceneActivation = true;
     }
 
+
     //Load selected level
-    void LoadLevel(string Level)
+    public void LoadLevel(string Level)
     {
         //Remove local deaths
-        if (sceneBuildIndex < 0) sceneBuildIndex += 2;
         SaveJson(sceneBuildIndex, -1, -1, 0, LoadJson().levelDone[sceneBuildIndex], -1, -1, -1); //Save
 
-        //Load selected scene (probably menu)
+        System.GC.Collect();
+
+        //Load selected scene
         SceneManager.LoadScene(Level);
     }
 }

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1671200402}
-  m_IndirectSpecularColor: {r: 0.48397493, g: 0.575722, b: 0.6801979, a: 1}
+  m_IndirectSpecularColor: {r: 0.48397553, g: 0.5757211, b: 0.6801981, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2355,12 +2355,6 @@ Transform:
   m_Father: {fileID: 1634122409}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &367594525 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4807688245432096, guid: 825bd4dd00a830943b6378fa00ae8729,
-    type: 3}
-  m_PrefabInstance: {fileID: 483809184}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &374187550 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4807688245432096, guid: 825bd4dd00a830943b6378fa00ae8729,
@@ -3035,56 +3029,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 676734096}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &483809184
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 1821194717}
-    m_Modifications:
-    - target: {fileID: 1878936031124210, guid: 825bd4dd00a830943b6378fa00ae8729, type: 3}
-      propertyPath: m_Name
-      value: Obstacle (12)
-      objectReference: {fileID: 0}
-    - target: {fileID: 4807688245432096, guid: 825bd4dd00a830943b6378fa00ae8729, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 22.085442
-      objectReference: {fileID: 0}
-    - target: {fileID: 4807688245432096, guid: 825bd4dd00a830943b6378fa00ae8729, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 11.3495865
-      objectReference: {fileID: 0}
-    - target: {fileID: 4807688245432096, guid: 825bd4dd00a830943b6378fa00ae8729, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 9.24192
-      objectReference: {fileID: 0}
-    - target: {fileID: 4807688245432096, guid: 825bd4dd00a830943b6378fa00ae8729, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4807688245432096, guid: 825bd4dd00a830943b6378fa00ae8729, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4807688245432096, guid: 825bd4dd00a830943b6378fa00ae8729, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4807688245432096, guid: 825bd4dd00a830943b6378fa00ae8729, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4807688245432096, guid: 825bd4dd00a830943b6378fa00ae8729, type: 3}
-      propertyPath: m_RootOrder
-      value: 154
-      objectReference: {fileID: 0}
-    - target: {fileID: 114137226582810804, guid: 825bd4dd00a830943b6378fa00ae8729,
-        type: 3}
-      propertyPath: disableRb
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 825bd4dd00a830943b6378fa00ae8729, type: 3}
 --- !u!1001 &487885424
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5542,7 +5486,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4807688245432096, guid: 825bd4dd00a830943b6378fa00ae8729, type: 3}
       propertyPath: m_RootOrder
-      value: 155
+      value: 154
       objectReference: {fileID: 0}
     - target: {fileID: 114137226582810804, guid: 825bd4dd00a830943b6378fa00ae8729,
         type: 3}
@@ -8776,6 +8720,8 @@ MonoBehaviour:
   disableShadows: 0
   disableLights: 1
   disableParticles: 0
+  disableRbDistanceInfront: 50
+  disableRbDistanceBehind: 10
   rb: {fileID: 0}
 --- !u!1 &1641714023
 GameObject:
@@ -9982,6 +9928,16 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114716861730808070, guid: d16787e846833cd4c93844eaec89e244,
+        type: 3}
+      propertyPath: m_Text
+      value: There are multiple paths in this level
+      objectReference: {fileID: 0}
+    - target: {fileID: 114572543032584072, guid: d16787e846833cd4c93844eaec89e244,
+        type: 3}
+      propertyPath: m_Text
+      value: LEVEL 6
+      objectReference: {fileID: 0}
     - target: {fileID: 114698955316777360, guid: d16787e846833cd4c93844eaec89e244,
         type: 3}
       propertyPath: camHigh
@@ -9992,10 +9948,10 @@ PrefabInstance:
       propertyPath: camLow
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 114716861730808070, guid: d16787e846833cd4c93844eaec89e244,
+    - target: {fileID: 224974162226521386, guid: d16787e846833cd4c93844eaec89e244,
         type: 3}
-      propertyPath: m_Text
-      value: There are multiple paths in this level
+      propertyPath: m_AnchoredPosition.y
+      value: -23.199951
       objectReference: {fileID: 0}
     - target: {fileID: 224228729684941268, guid: d16787e846833cd4c93844eaec89e244,
         type: 3}
@@ -10533,7 +10489,6 @@ Transform:
   - {fileID: 389782949}
   - {fileID: 1264358391}
   - {fileID: 879548948}
-  - {fileID: 367594525}
   - {fileID: 253387824}
   m_Father: {fileID: 0}
   m_RootOrder: 3

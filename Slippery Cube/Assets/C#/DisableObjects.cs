@@ -5,6 +5,7 @@ public class DisableObjects : MonoBehaviour {
     GameObject player;
     MeshRenderer rend;
     public bool disable, disableRb, disableShadows, disableLights, disableParticles;
+    public int disableRbDistanceInfront = 50, disableRbDistanceBehind = 10;
     public Rigidbody rb;
 
     // Improve performance
@@ -43,12 +44,12 @@ public class DisableObjects : MonoBehaviour {
         if (disableRb)
         {
             //Disable components on objects that are in front of player visible
-            if (transform.position.x > player.transform.position.x - 50) //Infront of Player
+            if (transform.position.x > player.transform.position.x - disableRbDistanceInfront) //Infront of Player
             {
                 rb.detectCollisions = true;
                 rb.isKinematic = false;
             }
-            if (transform.position.x > player.transform.position.x + 10) //Behind player
+            if (transform.position.x > player.transform.position.x + disableRbDistanceBehind) //Behind player
             {
                 rb.detectCollisions = false;
                 rb.isKinematic = true;
