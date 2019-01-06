@@ -508,6 +508,9 @@ MonoBehaviour:
   levelText: {fileID: 3935102000257873753}
   coinText: {fileID: 3934452136893636369}
   deathText: {fileID: 3934224229680812647}
+  level: 1
+  coins: 0
+  deaths: 0
   levelNames:
   - Level 1
   - Level 2
@@ -532,17 +535,17 @@ MonoBehaviour:
   levelCoins:
   - 4
   - 4
-  - x
-  - x
-  - x
-  - x
-  - x
-  - x
-  - x
-  - x
-  - x
-  - x
-  - x
+  - 6
+  - 10
+  - 8
+  - 9
+  - 15
+  - 12
+  - 18
+  - 42
+  - 16
+  - 15
+  - 11
   - x
   - x
   - x
@@ -571,7 +574,6 @@ MonoBehaviour:
   - Level18
   - Level19
   - Level20
-  level: 1
   lockLevel: 1
 --- !u!1 &3935102000257873753
 GameObject:

@@ -5,23 +5,33 @@ public class WorldUI : MonoBehaviour {
 
     //Variables
     public GameObject deathText, coinText;
-    public GameObject[] levelObjects;
+    //public GameObject[] levelObjects;
     GameManagerScript gMScript;
 
     public string worldCoins;
-    public string[] levels;
+    //public string[] levels;
     public int world;
+    public bool lockWorld = true;
 
     int coins, deaths;
-    bool toggle = true;
+    //bool toggle = true;
 
     //Start
     void Start()
     {
+        //Remove 1 from world so the value can be the world in the inspector but starts at 0 for arrays
+        world--;
+
         gMScript = GameObject.Find("GameManager").GetComponent<GameManagerScript>(); //Get GameManager
 
+        //Lock world if it's not unlocked
+        if (lockWorld && !gMScript.LoadJson().levelDone[world * 10 - 1])
+        {
+            gameObject.SetActive(false);
+        }
+
         //Get stored coins from world and display them
-        for (int i = world * 10; i < levels.Length + (world * 10); i++)
+        for (int i = world * 10; i < 10 + (world * 10); i++)
         {
             coins += gMScript.LoadJson().levelCoins[i]; //Get coins
             deaths += gMScript.LoadJson().levelDeaths[i]; //Get deaths
@@ -31,10 +41,12 @@ public class WorldUI : MonoBehaviour {
         coinText.GetComponent<Text>().text = coins.ToString() + " / " + worldCoins;
         deathText.GetComponent<Text>().text = deaths.ToString();
 
-        LevelToggle(); //Update levels on start
+        //LevelToggle(); //Update levels on start
     }
 
-    //Activate levels when clicking on World button
+    ////Old level select
+
+    /*/Activate levels when clicking on World button
     public void LevelToggle()
     {
         toggle = !toggle;
@@ -48,5 +60,5 @@ public class WorldUI : MonoBehaviour {
             }
             else { levelObjects[i].SetActive(false); }
         }
-    }
+    }*/
 }

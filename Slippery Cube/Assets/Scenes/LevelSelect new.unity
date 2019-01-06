@@ -2650,6 +2650,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: WorldToLevels
       objectReference: {fileID: 0}
+    - target: {fileID: 114867541512727802, guid: 66afa3316dc1e3347bb352eb647deffa,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1590778135, guid: 66afa3316dc1e3347bb352eb647deffa, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -2701,7 +2706,7 @@ PrefabInstance:
     - target: {fileID: 527492845572007308, guid: 66afa3316dc1e3347bb352eb647deffa,
         type: 3}
       propertyPath: world
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 66afa3316dc1e3347bb352eb647deffa, type: 3}
@@ -4211,6 +4216,16 @@ PrefabInstance:
       propertyPath: levels.Array.data[9]
       value: 
       objectReference: {fileID: 957401245}
+    - target: {fileID: 527492845572007308, guid: 66afa3316dc1e3347bb352eb647deffa,
+        type: 3}
+      propertyPath: world
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 527492845572007308, guid: 66afa3316dc1e3347bb352eb647deffa,
+        type: 3}
+      propertyPath: lockWorld
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 66afa3316dc1e3347bb352eb647deffa, type: 3}
 --- !u!1 &1770885663
@@ -5232,6 +5247,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Level1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3934506442261347415, guid: 5083e7953fcdfa54d89e03d95ee006ed,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3855419151781093037, guid: 5083e7953fcdfa54d89e03d95ee006ed,
         type: 3}

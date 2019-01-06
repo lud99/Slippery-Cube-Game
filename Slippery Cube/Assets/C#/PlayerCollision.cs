@@ -37,7 +37,6 @@ public class PlayerCollision : MonoBehaviour
                 }
             case "Obstacle": //Death trigger
                 {
-                    Debug.Log("Obstacle");
                     movement.enabled = false; //Disable movement
                     GetComponent<PracticeMode>().enabled = false; //Disable practice mode
                     FindObjectOfType<GameManagerScript>().EndGame(); //Restart Scene

@@ -8,13 +8,12 @@ public class LevelUI : MonoBehaviour {
     GameManagerScript gMScript;
     LoadScene loadScene;
 
-    int coins, deaths;
+    public int level, coins, deaths;
     public string[] levelNames, levelCoins, levelsToLoad;
-    public int level;
     public bool lockLevel = true;
 
     //Start
-    void Start()
+    public void Start()
     {
         //Remove 1 from level since array goes from 0 to 19 instead of 1 to 20. Because level 1 should get data from first array entry, 1 is subtracted
         level--;
@@ -24,7 +23,7 @@ public class LevelUI : MonoBehaviour {
         loadScene = GetComponent<LoadScene>();
 
         //Lock level if it's not unlocked
-        if (lockLevel && !gMScript.LoadJson().levelDone[level])
+        if (lockLevel && !gMScript.LoadJson().levelDone[level - 1])
         {
             gameObject.SetActive(false);
         }

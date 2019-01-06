@@ -39,12 +39,10 @@ public class UIAnimation : MonoBehaviour
         GameManagerScript gMScript = GameObject.Find("GameManager").GetComponent<GameManagerScript>(); //Get game manager
 
         //Update level objects to selected world
-        for (int i = world * 10; i < gMScript.LoadJson().levelCoins.Length + (world * 10); i++)
-        {
-            //Do stuff
-            Debug.Log(i);
-            /*gMScript.LoadJson().levelCoins[i]; //Get coins
-            gMScript.LoadJson().levelDeaths[i]; //Get deaths*/
+        for (int i = 0; i < 10; i++) { //Loop through level objects
+            levels[i].SetActive(true); //Activate all levels objects
+            levels[i].GetComponent<LevelUI>().level = i + 1 +((world - 1) * 10); //Set level to i + the selected world (basically)
+            levels[i].GetComponent<LevelUI>().Start(); //Update UI and deactivate if level isn't unlocked
         }
         anim.ResetTrigger("LevelsToWorld"); //Reset trigger
         anim.SetTrigger("WorldToLevels"); //Set trigger
@@ -54,7 +52,7 @@ public class UIAnimation : MonoBehaviour
     public void LevelsToWorld(int world)
     {
         anim = viewport.GetComponent<Animator>(); //Get animator
-        anim.ResetTrigger("World1ToLevels"); //Reset trigger
-        anim.SetTrigger("LevelsToWorld1"); //Set trigger
+        anim.ResetTrigger("WorldToLevels"); //Reset trigger
+        anim.SetTrigger("LevelsToWorld"); //Set trigger
     }
 }
