@@ -298,7 +298,7 @@ InputManager:
     descriptiveName: Take screenshot
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: 1
+    positiveButton: f1
     altNegativeButton: 
     altPositiveButton: joystick button 0
     gravity: 1000

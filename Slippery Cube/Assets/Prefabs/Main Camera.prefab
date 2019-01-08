@@ -105,7 +105,7 @@ MonoBehaviour:
   targetRotation: {x: 0, y: 0, z: 0, w: 0}
   rotate: 0
   setForward: 1
-  rotationSpeed: 0.1
+  rotationSpeed: 10
 --- !u!114 &5996286148816592209
 MonoBehaviour:
   m_ObjectHideFlags: 0

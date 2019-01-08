@@ -13,11 +13,11 @@ public class EventTriggerScript : MonoBehaviour, IPointerDownHandler, IPointerEx
     //Detect mouse click
     public void OnPointerDown(PointerEventData pointerEventData)
     {
-        anim.UIJump();
+        anim.UIJump(true);
     }
     //Mouse exit
     public void OnPointerExit(PointerEventData eventData)
     {
-        anim.UIJumpBack();
+        anim.UIJumpBack(true);
     }
 }

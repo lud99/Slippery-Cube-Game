@@ -3,13 +3,16 @@
 public class ButtonScript : MonoBehaviour {
 
     public GameObject[] EnableUI, DisableUI;
+    public GameObject fade, viewport;
     //public int levelBuildIndex;
     GameManagerScript gMScript;
+    FollowPlayer followPlayer;
 
-    //Init some vars
+    //Get components
     void Start()
     {
-        gMScript = GameObject.Find("GameManager").GetComponent<GameManagerScript>();
+        gMScript = GameObject.Find("GameManager").GetComponent<GameManagerScript>(); //Get game manager
+        followPlayer = Camera.main.GetComponent<FollowPlayer>(); //Get camera 'follow player' component
     }
 
     /*/Lock level
@@ -20,6 +23,20 @@ public class ButtonScript : MonoBehaviour {
             this.gameObject.SetActive(false);
         }
     }*/
+
+    //Activate short restart fade
+    public void ShortRestartFade()
+    {
+        fade.GetComponent<Animator>().SetTrigger("FadeOutShort"); //Activate fade
+    }
+
+    //Move viewport
+    public void MoveViewport(int speed)
+    {
+        RectTransform rectTrans = viewport.GetComponent<RectTransform>();
+
+        viewport.GetComponent<RectTransform>().position += new Vector3(speed, 0, 0);
+    }
 
     //Exit Application
     public void QuitGame()

@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class WorldUI : MonoBehaviour {
 
     //Variables
-    public GameObject deathText, coinText;
+    public GameObject deathText, coinText, lockPar;
     //public GameObject[] levelObjects;
     GameManagerScript gMScript;
 
@@ -27,7 +27,7 @@ public class WorldUI : MonoBehaviour {
         //Lock world if it's not unlocked
         if (lockWorld && !gMScript.LoadJson().levelDone[world * 10 - 1])
         {
-            gameObject.SetActive(false);
+            lockPar.SetActive(true);
         }
 
         //Get stored coins from world and display them

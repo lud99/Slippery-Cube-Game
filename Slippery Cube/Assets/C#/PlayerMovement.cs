@@ -4,6 +4,7 @@ public class PlayerMovement : MonoBehaviour {
 
     float ScreenWidth, hinput;
     public float forwardForce = 8000f, sidewayForce = 100f, camRotX = 0, camRotY = -90; //0.01 fixed timestep
+    public bool setDefaultRotation = true, setDefaultForward = true;
     public Rigidbody rb;
     public Vector3 gravity, camOffset, camForward, camRight;
     Transform cam;
@@ -16,9 +17,12 @@ public class PlayerMovement : MonoBehaviour {
         followPlayer = Camera.main.GetComponent<FollowPlayer>(); //Get follow player
         ScreenWidth = Screen.width; //Get screen width
         Physics.gravity = gravity; //Set gravity
-        followPlayer.Awake(); //Set camera to find player and set default rotation
-        camForward = cam.forward; //Set camera forward
-        camRight = cam.right; //Set camera right
+        if (setDefaultRotation) followPlayer.Awake(); //Set camera to find player and set default rotation
+        if (setDefaultForward)
+        {
+            camForward = cam.forward; //Set camera forward
+            camRight = cam.right; //Set camera right
+        }
 
         //Chane applied force depending on physics level
         //8000 ff, 100 sf = 0.02 (default)

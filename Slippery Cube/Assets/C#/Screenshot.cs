@@ -42,7 +42,7 @@ public class Screenshot : MonoBehaviour
         //Check if succesfull
         if (File.Exists(path)) //If saving was succesfull
         {
-            Debug.Log("Saved screenshot");
+            Debug.Log("Saved screenshot to " + path);
         } else //If saving failed
         {
             Debug.Log("Could not save screenshot");

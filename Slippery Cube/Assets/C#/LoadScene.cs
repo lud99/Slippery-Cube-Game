@@ -11,45 +11,35 @@ public class LoadScene : MonoBehaviour {
         fade = GameObject.Find("Fade").GetComponent<Animator>();
     }
 
-    //Load selected scene
+    //Load selected scene (not async)
     public void LoadSceneName(string scene)
     {
-        if (gMScript.completeLevelUI != null && gMScript.completeLevelUI.activeSelf) //If all bonus coins are added
+        if (gMScript.completeLevelUI != null && gMScript.completeLevelUI.activeSelf) //If levels is finished
         {
-            if (gMScript.addCoinsDone) gMScript.LoadLevel(scene);
+            if (gMScript.addCoinsDone) gMScript.LoadLevel(scene); //If all bonus coins are added
         }
         else gMScript.LoadLevel(scene);
     }
 
-    //Begin load selected scene async function
-    public void BeginLoadSceneNameAsync(string scene)
+    //Begin loading selected scene async
+    public void BeginAsyncLoading(string scene, int sceneIndex)
     {
-        if (scene != "")
-        {
-            StartCoroutine(gMScript.BeginAsyncLoadLevel(scene));
-            fade.SetTrigger("FadeOutShortLoadScene");
-        }
+        StartCoroutine(gMScript.BeginAsyncLoading(scene, sceneIndex)); //Begin loading selected scene async
     }
 
-    //Load selected scene Async
-    public void LoadSceneNameAsync()
+    //Load selected scene async without removing local deaths
+    public void AsyncLoading()
     {
-        gMScript.AsyncLoadLevel();
+        gMScript.AsyncLoading(); //Switch to async loaded scene
     }
 
-    //Begin Async Restart function
-    public void BeginAsyncRestart()
+    //Load selected scene async whith removing local deaths
+    public void AsyncLoadingRemoveDeaths()
     {
-        //Load current scene
-        StartCoroutine(gMScript.BeginAsyncRestart());
+        gMScript.AsyncLoading(); //Switch to async loaded scene
+        gMScript.SaveJson(gMScript.sceneBuildIndex, -1, -1, 0, gMScript.LoadJson().levelDone[gMScript.sceneBuildIndex], -1, -1, -1); //Remove local deaths
     }
 
-    //Restart function
-    public void AsyncRestart()
-    {
-        //Async restart
-        gMScript.AsyncRestart();
-    }
     //Restart function
     public void Restart()
     {
@@ -57,15 +47,5 @@ public class LoadScene : MonoBehaviour {
         {
             if (gMScript.addCoinsDone) gMScript.Restart(true); //Restart            
         } else gMScript.Restart(false); //Restart            
-    }
-
-    //Next level function
-    public void NextLevel()
-    {
-        if (gMScript.addCoinsDone) //If all bonus coins are added
-        {
-            //Load next level
-            gMScript.LoadNextLevel();
-        }
     }
 }

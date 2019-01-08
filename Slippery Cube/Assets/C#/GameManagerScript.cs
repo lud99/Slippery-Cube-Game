@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,20 +8,19 @@ public class GameManagerScript : MonoBehaviour {
 
     //Variables
     public bool gameHasEnded = false;
-    int coins, sceneBuildIndex;
+    public int coins, sceneBuildIndex;
     string level, savePath;
 
-    GameObject coinText;
-    AsyncOperation asyncRestart, asyncLoadNextLevel, asyncLoadLevel;
-    public GameObject fade, completeLevelUI;
-    public bool completeLevelDone = true, addCoinsDone = true;
+    public AsyncOperation asyncLoading;
+    public GameObject fade, completeLevelUI, coinText;
+    public bool completeLevelDone = true, addCoinsDone = true, loadNextLevel = true;
     public int currentCoins, spentCoins;
     public string[] levels;
 
     //Data to save
     public class Data
     {
-        public int localDeaths = 0, currentCoins = 0, spentCoins = 0, gamemode = 0;
+        public int localDeaths = 0, currentCoins = 0, spentCoins = 0, gamemode = 0, currentOutfit = 0;
         public int[] levelCoins = new int[20], levelDeaths = new int[20];
         public bool[] levelDone = new bool[20];
     }
@@ -29,7 +29,7 @@ public class GameManagerScript : MonoBehaviour {
     void Awake()
     {
         //Get objects
-        coinText = GameObject.Find("CoinText");
+        if (coinText == null) coinText = GameObject.Find("CoinText");
         level = SceneManager.GetActiveScene().name;
         if (SceneManager.GetActiveScene().buildIndex > 1) sceneBuildIndex = SceneManager.GetActiveScene().buildIndex - 2;
         else sceneBuildIndex = SceneManager.GetActiveScene().buildIndex;
@@ -83,7 +83,8 @@ public class GameManagerScript : MonoBehaviour {
         //Go to next level
         if (Input.GetButtonDown("NextLevel") && completeLevelDone && addCoinsDone)
         {
-            LoadNextLevel();
+            AsyncLoading();
+            SaveJson(sceneBuildIndex, -1, -1, 0, LoadJson().levelDone[sceneBuildIndex], -1, -1, -1); //Remove local deaths
         }
         //Pause menu and exiting level
         if (Input.GetButtonDown("Cancel"))
@@ -125,6 +126,20 @@ public class GameManagerScript : MonoBehaviour {
         string json = JsonUtility.ToJson(data); //Convert data to json
         File.WriteAllText(savePath, json); //Write data to file
     }
+    //Save to json (outfits
+    public void SaveJsonOutfits(int level, int currentOutfit)
+    {
+        //Setup
+        Data data = new Data(); //Data to save
+        data = LoadJson(); //Load saved data
+
+        //Overwrite data with custom stuff
+        if (currentOutfit != -1) data.currentOutfit = currentOutfit; //Save local deaths
+
+        //Save
+        string json = JsonUtility.ToJson(data); //Convert data to json
+        File.WriteAllText(savePath, json); //Write data to file
+    }
 
     //Load saved data
     public Data LoadJson()
@@ -148,11 +163,10 @@ public class GameManagerScript : MonoBehaviour {
     {
         File.Delete(savePath); //Delete save file
         PlayerPrefs.SetInt("MenuMusic", 0); //Reset menu music
-        GameObject.Find("Music").GetComponent<Music>().SelectMenuMusic(0);
         //If delete was succesfull
         if (!File.Exists(savePath)) Debug.Log("Save file has been succesfully deleted"); 
         else Debug.Log("Save file could not be deleted");
-        Restart(false); //Restart
+        //Restart(false); //Restart
     }
 
     //Complete Level function
@@ -164,7 +178,7 @@ public class GameManagerScript : MonoBehaviour {
             completeLevelUI.SetActive(true);
 
             //Start loading current level and next level
-            StartCoroutine(BeginAsyncLoadNextLevel());
+            if (loadNextLevel) StartCoroutine(BeginAsyncLoading("", SceneManager.GetActiveScene().buildIndex + 1));
 
             //Update save variables
             coins = coinText.GetComponent<CoinText>().coins;
@@ -190,6 +204,8 @@ public class GameManagerScript : MonoBehaviour {
         {
             gameHasEnded = true;
 
+            StartCoroutine(BeginAsyncLoading(SceneManager.GetActiveScene().name, -1)); //Start loading current scene async
+
             //Increase total deaths by 1
             SaveJson(sceneBuildIndex, -1, LoadJson().levelDeaths[sceneBuildIndex] + 1, LoadJson().localDeaths + 1, LoadJson().levelDone[sceneBuildIndex], -1, -1, -1); //Save
 
@@ -210,97 +226,53 @@ public class GameManagerScript : MonoBehaviour {
         }
     }
 
-    //Load current scene ahead of time
-    public IEnumerator BeginAsyncRestart()
-    {
-        asyncRestart = SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name);
-        asyncRestart.allowSceneActivation = false;
-        yield return asyncRestart;
-    }
-
-    //Load next scene ahead of time
-    public IEnumerator BeginAsyncLoadNextLevel()
-    {
-        asyncLoadNextLevel = SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
-        asyncLoadNextLevel.allowSceneActivation = false;
-        yield return asyncLoadNextLevel;
-    }
-
     //Load selected scene ahead of time
-    public IEnumerator BeginAsyncLoadLevel(string scene)
-    {
-        asyncLoadLevel = SceneManager.LoadSceneAsync(scene);
-        asyncLoadLevel.allowSceneActivation = false;
-        yield return asyncLoadLevel;
+    public IEnumerator BeginAsyncLoading(string scene, int sceneIndex)
+    {   
+        //Load scene by string
+        if (scene != "") asyncLoading = SceneManager.LoadSceneAsync(scene);
+
+        //Load scene by build index
+        if (sceneIndex != -1) asyncLoading = SceneManager.LoadSceneAsync(sceneIndex);
+
+        asyncLoading.allowSceneActivation = false;
+        yield return asyncLoading;
     }
 
-    //Async Restart
-    public void AsyncRestart()
+    //Load selected scene
+    public void AsyncLoading()
     {
-        System.GC.Collect();
+        GC.Collect(); //Clean garbage
 
         //If async loading is not done
-        if (asyncRestart.progress < 0.8)
+        if (asyncLoading.progress < 0.8)
         {
-            Debug.Log("Cannot restart");
-            Restart(false); //Restart
+            Debug.Log("Cannot load scene");
         }
+
         //Set to switch to async loaded scene
-        asyncRestart.allowSceneActivation = true;
+        asyncLoading.allowSceneActivation = true;
     }
 
-    //Normal Restart
-    public void Restart(bool removeLocalDeaths)
-    {
-        System.GC.Collect();
-
-        if (removeLocalDeaths) SaveJson(sceneBuildIndex, -1, -1, 0, LoadJson().levelDone[sceneBuildIndex], -1, -1, -1); //Remove local deaths
-
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name); //Restart
-    }
-
-    //Async load level
-    public void AsyncLoadLevel()
-    {
-        System.GC.Collect();
-
-        //If async loading is not done
-        if (asyncLoadLevel.progress < 0.8)
-        {
-            Debug.Log("Cannot load level");
-        }
-        //Set to switch to async loaded scene
-        asyncLoadLevel.allowSceneActivation = true;
-    }
-
-    //Load next level
-    public void LoadNextLevel()
-    {
-        //Remove local deaths
-        SaveJson(sceneBuildIndex, -1, -1, 0, LoadJson().levelDone[sceneBuildIndex], -1, -1, -1); //Save
-
-        System.GC.Collect();
-
-        //If async loading is not done
-        if (asyncLoadNextLevel.progress < 0.8)
-        {
-            Debug.Log("Cannot load next level");
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1); //Load next level
-        }
-        //Set to switch to async loaded scene
-        asyncLoadNextLevel.allowSceneActivation = true;
-    }
-
-
-    //Load selected level
+    //Load selected level (not async)
     public void LoadLevel(string Level)
     {
         //Remove local deaths
         SaveJson(sceneBuildIndex, -1, -1, 0, LoadJson().levelDone[sceneBuildIndex], -1, -1, -1); //Save
 
-        System.GC.Collect();
+        GC.Collect(); //Clean garbage
 
         //Load selected scene
         SceneManager.LoadScene(Level);
+    }
+
+    //Normal Restart
+    public void Restart(bool removeLocalDeaths)
+    {
+        GC.Collect(); //Clean garbage
+
+        if (removeLocalDeaths) SaveJson(sceneBuildIndex, -1, -1, 0, LoadJson().levelDone[sceneBuildIndex], -1, -1, -1); //Remove local deaths
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name); //Restart
     }
 }

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4154181139580082}
   - component: {fileID: 114083084795686272}
+  - component: {fileID: 7788231797650137562}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -43,11 +44,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97b418938efaa0d458388109a0f4e988, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameHasEnded: 0
+  coins: 0
+  sceneBuildIndex: 0
   fade: {fileID: 1336200231106668, guid: d16787e846833cd4c93844eaec89e244, type: 3}
   completeLevelUI: {fileID: 1421443901525100, guid: d16787e846833cd4c93844eaec89e244,
     type: 3}
+  coinText: {fileID: 0}
   completeLevelDone: 0
   addCoinsDone: 0
+  loadNextLevel: 1
   currentCoins: 0
   spentCoins: 0
   levels:
@@ -63,3 +69,48 @@ MonoBehaviour:
   - Level10
   - Level11
   - Level12
+--- !u!114 &7788231797650137562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1763916734811484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e9c685ad117a7d45b0075bbe5f658cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerMats:
+  - {fileID: 2100000, guid: 00df1fe3e5fd50841b2da21d296db765, type: 2}
+  - {fileID: 2100000, guid: 8da7ae7012a54924fb805aff70807d43, type: 2}
+  - {fileID: 2100000, guid: 6bfd5e754b39ef243a6a67b43e748ad1, type: 2}
+  - {fileID: 2100000, guid: 75d415af00863a745b3b201b5f13d1ad, type: 2}
+  - {fileID: 2100000, guid: 978367304f4f77c4daf6bba272d4e26e, type: 2}
+  - {fileID: 2100000, guid: 81378035fcffbc343ae74290253419eb, type: 2}
+  - {fileID: 2100000, guid: f0fd20f3fbca57546b737c4aa00a8f5a, type: 2}
+  - {fileID: 2100000, guid: d840d7364ecf53940b6303b03f86f320, type: 2}
+  - {fileID: 2100000, guid: 5189dcd73877c3e418970bb4146ca5d9, type: 2}
+  - {fileID: 2100000, guid: 0e9624e6b939c954b87b74d282523d16, type: 2}
+  - {fileID: 2100000, guid: 6d4e414334900404f83aadfc14617a95, type: 2}
+  - {fileID: 2100000, guid: b18a6843b8086e94095d8a02c4d5aaea, type: 2}
+  - {fileID: 2100000, guid: dc3c78fac170a904ba6b3105495c7d96, type: 2}
+  - {fileID: 2100000, guid: b74e1136c3cbd824c8dfaeb997a5bbaa, type: 2}
+  - {fileID: 2100000, guid: 2e4f616ef2bf516478b519de59da8dcb, type: 2}
+  - {fileID: 2100000, guid: a47a8d8510a444f428e82a502f6ef49b, type: 2}
+  - {fileID: 2100000, guid: d54a773523b6cab45ba945fc1dedb988, type: 2}
+  - {fileID: 2100000, guid: b768878952306a840b9e5d45e86b18db, type: 2}
+  - {fileID: 2100000, guid: 75a37afd7d4822542aa2e9061df3869a, type: 2}
+  - {fileID: 2100000, guid: c3fb0655056e4a348ba30b8c0db04d42, type: 2}
+  - {fileID: 2100000, guid: 3227c39ecb1958d4e896653980d9596d, type: 2}
+  - {fileID: 2100000, guid: 92ec0e75ace71254484cbd466a728aa2, type: 2}
+  - {fileID: 2100000, guid: b768878952306a840b9e5d45e86b18db, type: 2}
+  - {fileID: 2100000, guid: 37943c65282fedc4796829d34849f85f, type: 2}
+  - {fileID: 2100000, guid: 2fe2fdb12356b44469f17f26aa51df7b, type: 2}
+  - {fileID: 2100000, guid: a5e57008c8ed9c44ab8c63bb9caee353, type: 2}
+  - {fileID: 2100000, guid: 2db5613ec6486134498b0061d1afd1fb, type: 2}
+  - {fileID: 2100000, guid: 2db5613ec6486134498b0061d1afd1fb, type: 2}
+  - {fileID: 2100000, guid: c8cd98752021d604eacb07cb3e0d91b0, type: 2}
+  - {fileID: 2100000, guid: 7fd0e65cba178804bbe9a2d74535f8ea, type: 2}
+  colorImages:
+  - {fileID: 0}

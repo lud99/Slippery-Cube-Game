@@ -8,7 +8,7 @@ public class FollowPlayer : MonoBehaviour {
     public Vector3 offset, camForward, camRight;
     public Quaternion targetRotation;
     public bool rotate = false, setForward = true;
-    public float rotationSpeed = 0.1f;
+    public float rotationSpeed = 10f;
 
     //Get player
     public void Awake()
@@ -50,16 +50,18 @@ public class FollowPlayer : MonoBehaviour {
                 setForward = false; //only execute once
             }
 
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed); //Smoothly rotate camera
-            if (targetRotation.y == 0.7f && transform.rotation.y > targetRotation.y) //Set 'rotate' to false if finished
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime); //Smoothly rotate camera
+            if (targetRotation.y < -0.7f && transform.rotation.y < -90f) //Set 'rotate' to false if finished
             {
                 rotate = false;
-                transform.rotation = Quaternion.Euler(0, 90, 0); 
+                transform.rotation = Quaternion.Euler(0, 90, 0);
+                //playerMovement.enabled = true;
             }
-            if (targetRotation.y == -0.7f && transform.rotation.y < targetRotation.y) //Set 'rotate' to false if finished 
+            if (targetRotation.y >= -0.7f && transform.rotation.y > targetRotation.y) //Set 'rotate' to false if finished 
             {
                 rotate = false;
                 transform.rotation = Quaternion.Euler(0, -90, 0);
+                //playerMovement.enabled = true;
             }
         }
     }

@@ -5,13 +5,23 @@ public class PostProcessingSettings : MonoBehaviour
 {
     PostProcessVolume volume;
     PostProcessLayer layer;
+    public bool onlyOneCamera = true;
+    public bool dontDestroyOnLoad = true;
 
     //Start of game
     public void Awake()
     {
-        DontDestroyOnLoad(this); //Be active in all scenes
-        //Destroy other camera objects so there's only 1 camera
-        if (GameObject.FindGameObjectsWithTag("MainCamera").Length > 1) Destroy(this.gameObject);
+       if (dontDestroyOnLoad) DontDestroyOnLoad(this); //Be active in all scenes 
+
+        //Destroy this camera if there are more than 1 currently active
+        if (onlyOneCamera)
+        {
+            if (GameObject.FindGameObjectsWithTag("MainCamera").Length > 1) Destroy(this.gameObject);
+        } else //Destroy other camera
+        {
+            if (GameObject.Find("Main Camera")) Destroy(GameObject.Find("Main Camera"));
+        }
+        
 
         //Get post processing components
         volume = GetComponent<PostProcessVolume>();

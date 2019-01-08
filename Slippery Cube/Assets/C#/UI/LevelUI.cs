@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class LevelUI : MonoBehaviour {
 
     //Variables
-    public GameObject levelText, coinText, deathText;
+    public GameObject levelText, coinText, deathText, lockPar;
     GameManagerScript gMScript;
     LoadScene loadScene;
 
@@ -23,9 +23,9 @@ public class LevelUI : MonoBehaviour {
         loadScene = GetComponent<LoadScene>();
 
         //Lock level if it's not unlocked
-        if (lockLevel && !gMScript.LoadJson().levelDone[level - 1])
+        if (lockLevel && !gMScript.LoadJson().levelDone[level - 1]) //Unlock if previos level is done, not current (which is why 1 is subtracted)
         {
-            gameObject.SetActive(false);
+            lockPar.SetActive(true);
         }
 
         //Get data for selected level
@@ -41,7 +41,11 @@ public class LevelUI : MonoBehaviour {
     //Begin loading selected level async
     public void LoadLevel()
     {
-        StartCoroutine(gMScript.BeginAsyncLoadLevel(levelsToLoad[level]));
-        GameObject.Find("Fade").GetComponent<Animator>().SetTrigger("FadeOutShortLoadScene");
+        //If no levels is currently loading
+        if (gMScript.asyncLoading == null && !lockPar.activeSelf)
+        {
+            StartCoroutine(gMScript.BeginAsyncLoading(levelsToLoad[level], -1));
+            GameObject.Find("Fade").GetComponent<Animator>().SetTrigger("FadeOutShortLoadScene");
+        }
     }
 }
