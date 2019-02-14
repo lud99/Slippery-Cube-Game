@@ -4,8 +4,9 @@ public class DisableObjects : MonoBehaviour {
 
     GameObject player;
     MeshRenderer rend;
+    ParticleSystem parSys;
     public bool disable, disableRb, disableShadows, disableLights, disableParticles;
-    public int disableRbDistanceInfront = 50, disableRbDistanceBehind = 10;
+    public int disableRbDistanceInfront = 50, disableRbDistanceBehind = 10, pDistanceInfront = 30;
     public Rigidbody rb;
 
     // Improve performance
@@ -14,6 +15,7 @@ public class DisableObjects : MonoBehaviour {
         //Get components / objects
         player = GameObject.Find("Player");
         rend = GetComponent<MeshRenderer>();
+        parSys = GetComponent<ParticleSystem>();
 
         //Disable rigidbody on objects on start
         if (disableRb)
@@ -21,15 +23,15 @@ public class DisableObjects : MonoBehaviour {
             rb.detectCollisions = false;
             rb.isKinematic = true;
         }
-        //Disable particles
-        if (PlayerPrefs.GetInt("Particles") == 0 && disableParticles)
+        //Activate particles on start and disable if particles are disabled
+        if (disableParticles && parSys != null)
         {
-            if (GetComponent<ParticleSystem>() != null) GetComponent<ParticleSystem>().Stop();
+            parSys.Stop();
         }
         //Disable lights
         if (PlayerPrefs.GetInt("Lights") == 0 && disableLights)
         {
-            this.gameObject.SetActive(false);
+            gameObject.SetActive(false);
         }
         //Disable shadow casting if graphics are set to low
         if ((QualitySettings.GetQualityLevel() == 0 || QualitySettings.GetQualityLevel() == 1) && disableShadows)
@@ -43,16 +45,32 @@ public class DisableObjects : MonoBehaviour {
     {
         if (disableRb)
         {
-            //Disable components on objects that are in front of player visible
+            //Disable rigidbody on objects that are in front of player
             if (transform.position.x > player.transform.position.x - disableRbDistanceInfront) //Infront of Player
             {
+                //Activate Rigidbody
                 rb.detectCollisions = true;
                 rb.isKinematic = false;
             }
             if (transform.position.x > player.transform.position.x + disableRbDistanceBehind) //Behind player
             {
+                //Disable rigidbody
                 rb.detectCollisions = false;
                 rb.isKinematic = true;
+            }
+        }
+        if (disableParticles)
+        {
+            //Disable particles on objects that are in front of player
+            if (transform.position.x > player.transform.position.x - pDistanceInfront) //Infront of Player
+            {
+                //Play particles
+                if (!parSys.isPlaying) parSys.Play();
+            }
+            if (transform.position.x > player.transform.position.x + 10) //Behind player
+            {
+                //Stop particles
+                if (parSys.isPlaying) parSys.Stop();
             }
         }
     }

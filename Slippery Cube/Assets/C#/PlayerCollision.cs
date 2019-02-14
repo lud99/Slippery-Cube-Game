@@ -3,7 +3,6 @@
 public class PlayerCollision : MonoBehaviour
 {
     public PlayerMovement movement;
-    GameObject player;
     GameManagerScript gMScript;
 
     //Get game manager
@@ -37,7 +36,6 @@ public class PlayerCollision : MonoBehaviour
                 }
             case "Obstacle": //Death trigger
                 {
-                    Debug.Log("Obstacle");
                     movement.enabled = false; //Disable movement
                     GetComponent<PracticeMode>().enabled = false; //Disable practice mode
                     FindObjectOfType<GameManagerScript>().EndGame(); //Restart Scene
@@ -49,6 +47,7 @@ public class PlayerCollision : MonoBehaviour
                     float physics = 1f / PlayerPrefs.GetInt("Physics") * 100f; //Get fixed timestep
                     movement.forwardForce = pad.forwardForce / physics; //Change forward force
                     movement.sidewayForce = pad.sidewayForce; //Change sideway force
+                    if (pad.resetZVelocity) movement.rb.velocity = new Vector3(movement.rb.velocity.x, movement.rb.velocity.y, 0); //Reset sideways velocity if choosen
                     break;
                 }
             case "Reset Rotation": //Change Player Rotation
@@ -70,10 +69,21 @@ public class PlayerCollision : MonoBehaviour
                     Pad pad = other.GetComponent<Pad>(); //Get pad
                     FollowPlayer followPlayer = Camera.main.GetComponent<FollowPlayer>(); //Get follow player
                     followPlayer.offset = pad.offset; //Change camera offset
-                    followPlayer.targetRotation = pad.cameraRotation; //Set camera target rotation
+                    followPlayer.targetRotation = Quaternion.Euler(pad.cameraRotX, pad.cameraRotY, pad.cameraRotZ); //Set camera target rotation
                     followPlayer.rotate = pad.rotateCam; //Set camera to rotate
                     followPlayer.camForward = pad.camForward;
                     followPlayer.camRight = pad.camRight;
+                    float lightX = 0f, lightY = 0f, lightZ = 0f;
+                    if (pad.changeLightX) lightX = pad.offset.x;
+                    if (pad.changeLightY) lightY = pad.offset.y;
+                    if (pad.changeLightZ) lightZ = pad.offset.z;
+                    gameObject.transform.GetChild(0).transform.localPosition = new Vector3(lightX, lightY, lightZ);
+                    break;
+                }
+            case "Activate Objects Pad": //Activate / Deactivate objects
+                {
+                    ButtonScript buttonScript = other.GetComponent<ButtonScript>(); //Get button script
+                    buttonScript.UIToggle();
                     break;
                 }
         }

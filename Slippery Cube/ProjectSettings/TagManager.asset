@@ -12,6 +12,7 @@ TagManager:
   - Grav Pad
   - Cam Pad
   - Movement Pad
+  - Activate Objects Pad
   layers:
   - Default
   - TransparentFX

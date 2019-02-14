@@ -388,10 +388,11 @@ GameObject:
   - component: {fileID: 3965883068201898321}
   - component: {fileID: 3965405028078404107}
   - component: {fileID: 3936117171752754424}
-  - component: {fileID: 3936117171752754427}
   - component: {fileID: 3936117171752754426}
   - component: {fileID: 583764526685938909}
   - component: {fileID: 5349948534338746907}
+  - component: {fileID: 6517027870787142063}
+  - component: {fileID: 8873203438901474463}
   m_Layer: 5
   m_Name: Level
   m_TagString: Untagged
@@ -474,11 +475,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 0
+    m_Mode: 4
     m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnDown: {fileID: 3965405028078404107}
     m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnRight: {fileID: 3965405028078404107}
   m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -492,10 +493,10 @@ MonoBehaviour:
     m_PressedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_DisabledTrigger: Disabled
+    m_NormalTrigger: 
+    m_HighlightedTrigger: UIJump
+    m_PressedTrigger: UIJumpDefault
+    m_DisabledTrigger: UIJumpBack
   m_Interactable: 1
   m_TargetGraphic: {fileID: 3965883068201898321}
   m_OnClick:
@@ -544,54 +545,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &3936117171752754427
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3934506442261347415}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 1
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 3936117171752754426}
-          m_MethodName: UIJumpBack
-          m_Mode: 6
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 1
-          m_CallState: 2
-      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
-        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  - eventID: 2
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 3936117171752754426}
-          m_MethodName: UIJump
-          m_Mode: 6
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 1
-          m_CallState: 2
-      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
-        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  delegates: []
 --- !u!114 &3936117171752754426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -607,7 +560,12 @@ MonoBehaviour:
   animObject: {fileID: 0}
   backButton: {fileID: 0}
   lockPar: {fileID: 3475551213724610273}
+  selectedWorld: {fileID: 0}
+  scrollbar: {fileID: 0}
   levels: []
+  SetTriggerOnStart: 0
+  worldToLevelsTransitionOnStart: 0
+  animTrigger: 
 --- !u!114 &583764526685938909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -615,7 +573,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3934506442261347415}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c34e86ea477dfe84ea0570c884496ed1, type: 3}
   m_Name: 
@@ -624,7 +582,8 @@ MonoBehaviour:
   coinText: {fileID: 3934452136893636369}
   deathText: {fileID: 3934224229680812647}
   lockPar: {fileID: 3475551213724610273}
-  level: 1
+  viewport: {fileID: 0}
+  level: 2
   coins: 0
   deaths: 0
   levelNames:
@@ -657,13 +616,13 @@ MonoBehaviour:
   - 9
   - 15
   - 12
-  - 18
+  - 17
   - 42
   - 16
   - 15
+  - 15
   - 11
-  - x
-  - x
+  - 15
   - x
   - x
   - x
@@ -691,6 +650,7 @@ MonoBehaviour:
   - Level19
   - Level20
   lockLevel: 1
+  unlockLevel: 0
 --- !u!114 &5349948534338746907
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -706,6 +666,35 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.39215687}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
+--- !u!114 &6517027870787142063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3934506442261347415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7deada4e36b55bb48b647451c5053176, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  viewport: {fileID: 0}
+  scrollX: 0
+  scrollY: 0
+  scrollAmount: 500
+--- !u!114 &8873203438901474463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3934506442261347415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1200242548, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShowMaskGraphic: 1
 --- !u!1 &3935102000257873753
 GameObject:
   m_ObjectHideFlags: 0

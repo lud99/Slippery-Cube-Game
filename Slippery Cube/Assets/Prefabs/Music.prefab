@@ -66,12 +66,12 @@ MonoBehaviour:
   - Level18
   - Level19
   - Level20
+  playLevelMusicInMenu: 0
   music:
-  - {fileID: 8300000, guid: 0384e2561dec58a478f4e35a5900baa2, type: 3}
+  - {fileID: 8300000, guid: d9a09162a2ead574abe5c7f7d082a366, type: 3}
   - {fileID: 8300000, guid: 87863da2675c6e4449cf12b71a01bb6b, type: 3}
-  - {fileID: 8300000, guid: e80798e5c70fdb149b7b1f34b8bdea9c, type: 3}
+  - {fileID: 8300000, guid: 96eeb029607c136458991498199d66a4, type: 3}
   dropdown: {fileID: 0}
-  changeMusic: 0
 --- !u!82 &82395406808645368
 AudioSource:
   m_ObjectHideFlags: 0

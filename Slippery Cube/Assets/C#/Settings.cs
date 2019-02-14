@@ -141,8 +141,8 @@ public class Settings : MonoBehaviour {
             Vignette(0);
             Grain(0);
             Bloom(0);
-            MotionBlur(0);
-            Dof(0);
+            //MotionBlur(0);
+            //Dof(0);
         }
         if (preset == 1) //Medium
         {
@@ -152,8 +152,8 @@ public class Settings : MonoBehaviour {
             Vignette(1);
             Grain(1);
             Bloom(1);
-            MotionBlur(0);
-            Dof(0);
+            //MotionBlur(0);
+            //Dof(0);
         }
         if (preset == 2) //High
         {
@@ -163,8 +163,8 @@ public class Settings : MonoBehaviour {
             Vignette(1);
             Grain(1);
             Bloom(1);
-            MotionBlur(0);
-            Dof(1);
+            //MotionBlur(0);
+            //Dof(1);
         }
     }
 

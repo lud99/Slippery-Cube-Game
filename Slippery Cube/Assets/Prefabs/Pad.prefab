@@ -110,6 +110,8 @@ MonoBehaviour:
   disableShadows: 0
   disableLights: 0
   disableParticles: 1
+  disableRbDistanceInfront: 50
+  disableRbDistanceBehind: 10
   rb: {fileID: 0}
 --- !u!114 &114589772338895338
 MonoBehaviour:
@@ -125,3 +127,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gravity: {x: 0, y: 9.81, z: 0}
   offset: {x: 5, y: -1, z: 0}
+  camForward: {x: 0, y: 0, z: 0}
+  camRight: {x: 0, y: 0, z: 0}
+  playerRotation: {x: 0, y: 0, z: 0, w: 0}
+  forwardForce: 0
+  sidewayForce: 100
+  rotateCam: 0
+  resetZVelocity: 0
+  changeLightX: 0
+  changeLightY: 1
+  changeLightZ: 0
+  cameraRotX: 0
+  cameraRotY: 0
+  cameraRotZ: 0

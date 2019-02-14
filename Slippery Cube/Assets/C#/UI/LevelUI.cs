@@ -4,13 +4,13 @@ using UnityEngine.UI;
 public class LevelUI : MonoBehaviour {
 
     //Variables
-    public GameObject levelText, coinText, deathText, lockPar;
+    public GameObject levelText, coinText, deathText, lockPar, viewport;
     GameManagerScript gMScript;
     LoadScene loadScene;
 
     public int level, coins, deaths;
     public string[] levelNames, levelCoins, levelsToLoad;
-    public bool lockLevel = true;
+    public bool lockLevel = true, unlockLevel;
 
     //Start
     public void Start()
@@ -23,10 +23,13 @@ public class LevelUI : MonoBehaviour {
         loadScene = GetComponent<LoadScene>();
 
         //Lock level if it's not unlocked
-        if (lockLevel && !gMScript.LoadJson().levelDone[level - 1]) //Unlock if previos level is done, not current (which is why 1 is subtracted)
+        if (lockLevel && gMScript.LoadJson().levelDone[level - 1] && PlayerPrefs.GetInt("LevelToUnlock") != level) //Unlock if previos level is done, not current (which is why 1 is subtracted)
         {
-            lockPar.SetActive(true);
+            lockPar.SetActive(false);
         }
+
+        //Deactivate lock if level is completed
+        if (gMScript.LoadJson().levelDone[level]) lockPar.SetActive(false);
 
         //Get data for selected level
         deaths = gMScript.LoadJson().levelDeaths[level]; //Deaths
@@ -38,11 +41,22 @@ public class LevelUI : MonoBehaviour {
         deathText.GetComponent<Text>().text = deaths.ToString(); //Display level deaths
     }
 
+    //Play Unlock Animation
+    public void PlayUnlockAnimation()
+    {
+        if (PlayerPrefs.HasKey("LevelToUnlock") && unlockLevel && PlayerPrefs.GetInt("LevelToUnlock") == level && !gMScript.LoadJson().levelDone[level])
+        {
+            lockPar.SetActive(true);
+            GetComponent<UIAnimation>().UIUnlockLevel(false);
+        }
+        if (gMScript.LoadJson().levelDone[level]) lockPar.SetActive(false);
+    }
+
     //Begin loading selected level async
     public void LoadLevel()
     {
         //If no levels is currently loading
-        if (gMScript.asyncLoading == null && !lockPar.activeSelf)
+        if (gMScript.asyncLoading == null && !lockPar.activeSelf && !viewport.GetComponent<Animator>().GetBool("WorldLevelsTransition"))
         {
             StartCoroutine(gMScript.BeginAsyncLoading(levelsToLoad[level], -1));
             GameObject.Find("Fade").GetComponent<Animator>().SetTrigger("FadeOutShortLoadScene");

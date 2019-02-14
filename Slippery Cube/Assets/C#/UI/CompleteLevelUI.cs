@@ -44,7 +44,7 @@ public class CompleteLevelUI : MonoBehaviour {
             //Save (bonus coins)
             if (coins > gMScript.LoadJson().levelCoins[sceneBuildIndex] - bonusCoins) //Only save if coins are higher than ones stored 
             {
-                gMScript.SaveJson(sceneBuildIndex, coins + bonusCoins, -1, -1, true, -1, -1, -1);
+                gMScript.SaveJson(sceneBuildIndex, coins + bonusCoins, -1, -1, true, -1, -1, -1, -1, -1);
             }
         }
     }

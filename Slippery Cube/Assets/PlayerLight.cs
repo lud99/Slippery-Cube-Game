@@ -14,6 +14,6 @@ public class PlayerLight : MonoBehaviour
     public void UpdateColor()
     {
         Material playerMat = player.GetComponent<Renderer>().material;
-        GetComponent<Light>().color = new Color(playerMat.color.r, playerMat.color.g, playerMat.color.b, 1f);
+        GetComponent<Light>().color = new UnityEngine.Color(playerMat.color.r, playerMat.color.g, playerMat.color.b, 1f);
     }
 }

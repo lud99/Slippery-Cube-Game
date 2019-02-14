@@ -6,7 +6,7 @@ public class Music : MonoBehaviour
 {
     //string[] menuScenes;
     public string[] world1, world2;
-    public bool changeMusic = false;
+    public bool playLevelMusicInMenu;
     public AudioClip[] music;
     public GameObject dropdown;
     AudioSource audioSource;
@@ -19,7 +19,7 @@ public class Music : MonoBehaviour
         gMScript = GameObject.Find("GameManager").GetComponent<GameManagerScript>();
         DontDestroyOnLoad(this); //Be active in all scenes
 
-        if (GameObject.FindGameObjectsWithTag("Music").Length > 1) Destroy(this.gameObject);
+        if (GameObject.FindGameObjectsWithTag("Music").Length > 1) Destroy(gameObject);
     }
 
     //Choose music
@@ -88,7 +88,7 @@ public class Music : MonoBehaviour
             }
             if (scene == "TitleScreen" || scene == "LevelSelect" || scene == "Customization") //If on title screen or level select
             {
-                if (!audioSource.isPlaying || audioSource.clip != music[2]) //Only play music when no music is played (no music stacking) and stop other tracks that are not menu loop
+                if (!audioSource.isPlaying || audioSource.clip != music[2] && !playLevelMusicInMenu) //Only play music when no music is played (no music stacking) and stop other tracks that are not menu loop
                 {
                     /*changeMusic = false;
                     SelectMenuMusic(PlayerPrefs.GetInt("MenuMusic")); //Select menu music from stored preference*/

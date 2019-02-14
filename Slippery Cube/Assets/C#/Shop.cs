@@ -17,7 +17,7 @@ public class Shop : MonoBehaviour {
     {
         if (gMScript.LoadJson().currentCoins >= itemCost[itemID])
         {
-            gMScript.SaveJson(0, -1, -1, -1, gMScript.LoadJson().levelDone[0], -1, gMScript.LoadJson().spentCoins + itemCost[itemID], - 1);
+            gMScript.SaveJson(0, -1, -1, -1, gMScript.LoadJson().levelDone[0], -1, gMScript.LoadJson().spentCoins + itemCost[itemID], - 1, -1, -1);
             gMScript.CurrentCoins();
             Debug.Log("Succesfully bought " + itemName[itemID] + " for " + itemCost[itemID] + " coins");
         } else

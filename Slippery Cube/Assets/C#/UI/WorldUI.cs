@@ -4,14 +4,14 @@ using UnityEngine.UI;
 public class WorldUI : MonoBehaviour {
 
     //Variables
-    public GameObject deathText, coinText, lockPar;
+    public GameObject deathText, coinText, lockPar, scrollbar;
     //public GameObject[] levelObjects;
     GameManagerScript gMScript;
 
     public string worldCoins;
     //public string[] levels;
     public int world;
-    public bool lockWorld = true;
+    public bool lockWorld = true, unlockWorld;
 
     int coins, deaths;
     //bool toggle = true;
@@ -25,9 +25,9 @@ public class WorldUI : MonoBehaviour {
         gMScript = GameObject.Find("GameManager").GetComponent<GameManagerScript>(); //Get GameManager
 
         //Lock world if it's not unlocked
-        if (lockWorld && !gMScript.LoadJson().levelDone[world * 10 - 1])
+        if (lockWorld && gMScript.LoadJson().levelDone[world * 10 - 1] && PlayerPrefs.GetInt("WorldToUnlock") != world) //Unlock if previos level is done, not current (which is why 1 is subtracted)
         {
-            lockPar.SetActive(true);
+            lockPar.SetActive(false);
         }
 
         //Get stored coins from world and display them
@@ -35,13 +35,31 @@ public class WorldUI : MonoBehaviour {
         {
             coins += gMScript.LoadJson().levelCoins[i]; //Get coins
             deaths += gMScript.LoadJson().levelDeaths[i]; //Get deaths
+            gMScript.SaveJson(world, -1, -1, -1, gMScript.LoadJson().levelDone[world], -1, -1, -1, coins, deaths);
         }
 
         //Update text
         coinText.GetComponent<Text>().text = coins.ToString() + " / " + worldCoins;
         deathText.GetComponent<Text>().text = deaths.ToString();
 
+        //Load scrollbar position
+        scrollbar.GetComponent<Scrollbar>().value = gMScript.LoadJson().worldScrollbarPosition;
+
+        //Play unlock animation on start
+        PlayUnlockAnimation();
+
         //LevelToggle(); //Update levels on start
+    }
+
+    //Play Unlock Animation
+    public void PlayUnlockAnimation()
+    {
+        if (PlayerPrefs.HasKey("WorldToUnlock") && unlockWorld && PlayerPrefs.GetInt("WorldToUnlock") == world && !gMScript.LoadJson().levelDone[world * 10 + 1])
+        {
+            lockPar.SetActive(true);
+            GetComponent<UIAnimation>().UIUnlockLevel(true);
+        }
+        if (gMScript.LoadJson().levelDone[world * 10 + 1]) lockPar.SetActive(false);
     }
 
     ////Old level select

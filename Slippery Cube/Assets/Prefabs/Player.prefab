@@ -132,8 +132,11 @@ MonoBehaviour:
   sidewayForce: 100
   camRotX: 0
   camRotY: -90
+  camRotZ: 0
+  dieY: 0
   setDefaultRotation: 1
   setDefaultForward: 1
+  onlyRunStart: 0
   rb: {fileID: 54326237557871498}
   gravity: {x: 0, y: -9.81, z: 0}
   camOffset: {x: 5, y: 1, z: 0}

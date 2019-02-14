@@ -37,7 +37,7 @@ public class LoadScene : MonoBehaviour {
     public void AsyncLoadingRemoveDeaths()
     {
         gMScript.AsyncLoading(); //Switch to async loaded scene
-        gMScript.SaveJson(gMScript.sceneBuildIndex, -1, -1, 0, gMScript.LoadJson().levelDone[gMScript.sceneBuildIndex], -1, -1, -1); //Remove local deaths
+        gMScript.SaveJson(gMScript.sceneBuildIndex, -1, -1, 0, gMScript.LoadJson().levelDone[gMScript.sceneBuildIndex], -1, -1, -1, -1, -1); //Remove local deaths
     }
 
     //Restart function
@@ -46,6 +46,18 @@ public class LoadScene : MonoBehaviour {
         if (gMScript.completeLevelUI != null && gMScript.completeLevelUI.activeSelf) //If level is complete
         {
             if (gMScript.addCoinsDone) gMScript.Restart(true); //Restart            
-        } else gMScript.Restart(false); //Restart            
+        } else gMScript.Restart(false); //Restart
+    }
+
+    //Load Level function
+    public void LevelSelect()
+    {
+        gMScript.EnterInput();
+    }
+
+    //Load Level select function
+    public void Customization()
+    {
+        gMScript.EscapeInput();
     }
 }

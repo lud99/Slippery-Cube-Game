@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class ButtonScript : MonoBehaviour {
 
     public GameObject[] EnableUI, DisableUI;
     public GameObject fade, viewport;
+    //public bool setSelectedGameObjectOnStart;
     //public int levelBuildIndex;
     GameManagerScript gMScript;
     FollowPlayer followPlayer;
@@ -13,6 +15,7 @@ public class ButtonScript : MonoBehaviour {
     {
         gMScript = GameObject.Find("GameManager").GetComponent<GameManagerScript>(); //Get game manager
         followPlayer = Camera.main.GetComponent<FollowPlayer>(); //Get camera 'follow player' component
+        //if (PlayerPrefs.HasKey("ObjectToSelectOnStart") && setSelectedGameObjectOnStart) SetSelectedGameObjectString(PlayerPrefs.GetString("ObjectToSelectOnStart")); //Set saved object to be selected on start
     }
 
     /*/Lock level
@@ -41,7 +44,26 @@ public class ButtonScript : MonoBehaviour {
     //Exit Application
     public void QuitGame()
     {
+        Debug.Log("Quiting");
         Application.Quit();
+    }
+
+    //Set currently selected object (event system)
+    public void SetSelectedGameObject(GameObject objectToSelect)
+    {
+        EventSystem.current.SetSelectedGameObject(objectToSelect); //Set specified object to be selected
+    }
+
+    //Set currently selected object (event system) but find the object
+    public void SetSelectedGameObjectString(string objectName)
+    {
+        EventSystem.current.SetSelectedGameObject(GameObject.Find(objectName)); //Set specified object to be selected
+    }
+
+    //Delete PlayerPrefs key
+    public void DeletePlayerPrefsKey(string key)
+    {
+        PlayerPrefs.DeleteKey(key); //Delete key
     }
 
     //Activate and de-activate UI

@@ -186,6 +186,7 @@ GameObject:
   - component: {fileID: 527492845572007308}
   - component: {fileID: 6961589876220741646}
   - component: {fileID: 2834278358938410407}
+  - component: {fileID: 8091264275622184954}
   m_Layer: 5
   m_Name: World
   m_TagString: Untagged
@@ -268,9 +269,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnDown: {fileID: 114867541512727802}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 0
@@ -315,7 +316,18 @@ MonoBehaviour:
           m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 6961589876220741646}
+        m_MethodName: IgnoreDeselectAnimation
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
@@ -352,6 +364,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animObject: {fileID: 0}
   backButton: {fileID: 0}
+  lockPar: {fileID: 0}
+  selectedWorld: {fileID: 0}
   levels:
   - {fileID: 0}
   - {fileID: 0}
@@ -393,6 +407,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7deada4e36b55bb48b647451c5053176, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  viewport: {fileID: 0}
+  scrollX: 0
+  scrollY: 1
+  scrollAmount: 300
 --- !u!114 &2834278358938410407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -408,6 +426,19 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.39215687}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
+--- !u!114 &8091264275622184954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1628882457776806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1200242548, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShowMaskGraphic: 1
 --- !u!1 &1722839634653664
 GameObject:
   m_ObjectHideFlags: 0
