@@ -109,8 +109,10 @@ MonoBehaviour:
   backButton: {fileID: 0}
   lockPar: {fileID: 0}
   selectedWorld: {fileID: 0}
+  scrollbar: {fileID: 0}
   levels: []
   SetTriggerOnStart: 1
+  worldToLevelsTransitionOnStart: 0
   animTrigger: NewIconJump
 --- !u!95 &3140627415155131720
 Animator:
@@ -354,14 +356,18 @@ MonoBehaviour:
   lockPar: {fileID: 8794261837885256977}
   outline: {fileID: 0}
   colorScrollbar: {fileID: 0}
+  trailColorScrollbar: {fileID: 0}
   newButton: {fileID: 2481565067731387562}
   materialIndex: 0
   size: 0
   lockColor: 1
   setScrollbarPosition: 1
+  setTrailScrollbarPosition: 0
   trailColor: 0
   trailSize: 0
   markAsNew: 0
+  displayPlayerColor: 0
+  markAsNewAnyColor: 0
 --- !u!114 &2158291560015970561
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -377,7 +383,10 @@ MonoBehaviour:
   viewport: {fileID: 0}
   scrollX: 0
   scrollY: 0
+  jumpBackAfterClick: 1
+  jumpDefault: 1
   scrollAmount: 171
+  jumpBackAfterClickTime: 0.25
 --- !u!114 &6713456278742013215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -394,8 +403,10 @@ MonoBehaviour:
   backButton: {fileID: 0}
   lockPar: {fileID: 0}
   selectedWorld: {fileID: 0}
+  scrollbar: {fileID: 0}
   levels: []
   SetTriggerOnStart: 0
+  worldToLevelsTransitionOnStart: 0
   animTrigger: 
 --- !u!95 &1431246801030331162
 Animator:

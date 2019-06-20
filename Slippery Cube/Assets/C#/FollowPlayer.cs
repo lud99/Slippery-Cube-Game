@@ -25,10 +25,11 @@ public class FollowPlayer : MonoBehaviour {
                 offset = GameObject.Find("Player").GetComponent<PlayerMovement>().camOffset; //Set camera offset from player
                 //Set camera rotation
                 transform.rotation = Quaternion.Euler(playerMovement.camRotX, playerMovement.camRotY, playerMovement.camRotZ);
-                if (playerMovement.setDefaultForward) SetOldForward();
                 //Save default directions
-                camForward = transform.forward;
-                camRight = transform.right;
+                camForward = FloorVector3(transform.forward);
+                camRight = FloorVector3(transform.right);
+
+                //if (playerMovement.setDefaultForward) SetOldForward();
             }
         }
     }
@@ -37,15 +38,28 @@ public class FollowPlayer : MonoBehaviour {
     public void SetOldForward()
     {
         //Set directions
-        playerMovement.camForward = camForward;
-        playerMovement.camRight = camRight;
+        playerMovement.camForward = FloorVector3(camForward);
+        playerMovement.camRight = FloorVector3(camRight);
     }
+   
     //Set directions (current)
     public void SetNewForward()
     {
         //Set directions
         playerMovement.camForward = transform.forward;
         playerMovement.camRight = transform.right;
+    }
+
+    //Floor negative number
+    float Floor(float num)
+    {
+        return num < 0 ? -Mathf.Floor(-num) : Mathf.Floor(num);
+    }
+
+    //Floor Vector3
+    Vector3 FloorVector3(Vector3 vec)
+    {
+        return new Vector3(Floor(vec.x), Floor(vec.y), Floor(vec.z));
     }
 
     //Follow players position
@@ -63,8 +77,9 @@ public class FollowPlayer : MonoBehaviour {
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime); //Smoothly rotate camera
 
             //Set directions
-            playerMovement.camForward = camForward;
-            playerMovement.camRight = camRight;
+            SetOldForward();
+            /*playerMovement.camForward = camForward;
+            playerMovement.camRight = camRight;*/
         }
     }
 }

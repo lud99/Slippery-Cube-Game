@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5940647397595287007}
   m_Layer: 0
   m_Name: GameManager
-  m_TagString: Untagged
+  m_TagString: GameManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -53,6 +53,8 @@ MonoBehaviour:
   completeLevelUI: {fileID: 1421443901525100, guid: d16787e846833cd4c93844eaec89e244,
     type: 3}
   coinText: {fileID: 0}
+  practiceModePrefab: {fileID: 1633107413010076443, guid: a6f77d3f070ca2d45b19cf19f15783de,
+    type: 3}
   completeLevelDone: 0
   addCoinsDone: 0
   loadNextLevel: 1
@@ -61,6 +63,7 @@ MonoBehaviour:
   checkSpace: 1
   saveOnLevelComplete: 1
   pressedSpace: 0
+  allowPracticeMode: 1
   fogDensity: 0.02
   currentCoins: 0
   spentCoins: 0

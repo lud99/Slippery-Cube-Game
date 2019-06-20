@@ -13,19 +13,23 @@ public class Customization : MonoBehaviour
     PlayerMovement playerMovement;
     FollowPlayer followPlayer;
     Transform playerLight;
+    Animator anim, trailAnim;
 
     //Start
     public void Awake()
     {
         gMScript = GetComponent<GameManagerScript>(); //Get game manager
         player = GameObject.Find("Player"); //Get player
+
         //Only execute if player exists
         if (player != null)
         {
             playerLight = player.transform.GetChild(0); //Get player light
             playerRenderer = player.GetComponent<Renderer>(); //Get player renderer
             trail = GameObject.Find("Trail").GetComponent<ParticleSystem>(); //Get trail particle system
-            trailRender = GameObject.Find("Trail").GetComponent<ParticleSystemRenderer>(); //Get trail particle system
+            trailRender = trail.GetComponent<ParticleSystemRenderer>(); //Get trail particle system
+            anim = player.GetComponent<Animator>(); //Get animator
+            trailAnim = trail.GetComponent<Animator>(); //Get trail animator
             playerMovement = player.GetComponent<PlayerMovement>(); //Get player movement
             followPlayer = Camera.main.GetComponent<FollowPlayer>(); //Get follow player
             ChangePlayerMaterial(gMScript.LoadJson().currentOutfit); //Update player material with saved outfit
@@ -40,8 +44,6 @@ public class Customization : MonoBehaviour
         //Only execute if player exists
         if (playerRenderer != null)
         {
-            Animator anim = player.GetComponent<Animator>(); //Get animator
-
             //Reset animations
             anim.Rebind();
 
@@ -91,8 +93,32 @@ public class Customization : MonoBehaviour
         //Only execute if player trail exists
         if (trailRender != null)
         {
-            trail.GetComponent<ParticleSystemRenderer>().material = playerMats[materialIndex]; //Set player's material to selected one from array
+            //Reset animations
+            trailAnim.Rebind();
+
+            trailRender.material = playerMats[materialIndex]; //Set player's material to selected one from array
             gMScript.SaveJsonTrail(materialIndex, materialIndex, -1f, true, true); //Save selected outfit
+
+            //'Restart' Trail to update material
+            trailAnim.enabled = false;
+            trail.gameObject.SetActive(false);
+            trail.gameObject.SetActive(true);
+
+            //Play rainbow animation
+            if (colorImages[0] != null) colorImages[1].GetComponent<Animator>().SetTrigger("Rainbow2D");
+
+            //If rainbow material
+            if (materialIndex == 27)
+            {
+                trailAnim.enabled = true; //Enable trail animator
+                trailAnim.SetTrigger("TrailRainbow"); //Play rainbow animation on trail
+
+                if (colorImages[1] != null) //If on customization scene
+                {
+                    colorImages[1].GetComponent<Animator>().Rebind(); //Reset animation
+                    colorImages[1].GetComponent<Animator>().SetTrigger("Rainbow2D");
+                }
+            }
         }
     }
     //Change particle size

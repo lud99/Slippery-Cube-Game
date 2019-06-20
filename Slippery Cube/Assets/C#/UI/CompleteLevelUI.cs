@@ -46,12 +46,16 @@ public class CompleteLevelUI : MonoBehaviour {
             {
                 gMScript.SaveJson(sceneBuildIndex, coins + bonusCoins, -1, -1, true, -1, -1, -1, -1, -1);
             }
+
+            //Start adding coins
+            StartCoroutine(AddCoinTrigger(1f));
         }
     }
 
     //Add coins when world is completed (trigger)
-    public void AddCoinTrigger()
+    IEnumerator AddCoinTrigger(float time)
     {
+        yield return new WaitForSeconds(time);
         gMScript.addCoinsDone = false;
         StartCoroutine(AddCoins());
     }

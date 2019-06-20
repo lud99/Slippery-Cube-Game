@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 199927286886784610}
   m_Layer: 0
   m_Name: Box
-  m_TagString: Untagged
+  m_TagString: Box
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4732,6 +4732,9 @@ MonoBehaviour:
   disableShadows: 1
   disableLights: 0
   disableParticles: 1
+  disableRbDistanceInfront: 50
+  disableRbDistanceBehind: 10
+  pDistanceInfront: 30
   rb: {fileID: 54334581002829774}
 --- !u!199 &199927286886784610
 ParticleSystemRenderer:

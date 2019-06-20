@@ -22,7 +22,8 @@ public class Settings : MonoBehaviour {
         //Create PlayerPrefs files if none exists (settings)
         if (!PlayerPrefs.HasKey("Quality"))
         {
-            PlayerPrefs.SetInt("Quality", 0); //Graphics
+            Preset(2);
+            /*PlayerPrefs.SetInt("Quality", 0); //Graphics
             PlayerPrefs.SetInt("Physics", 60); //Physics
             PlayerPrefs.SetInt("FPSLimit", -1); //FPS Limit
             PlayerPrefs.SetInt("VSync", 0); //VSync
@@ -34,12 +35,12 @@ public class Settings : MonoBehaviour {
             PlayerPrefs.SetInt("Grain", 0); //Grain
             PlayerPrefs.SetInt("Bloom", 0); //Bloom
             PlayerPrefs.SetInt("DoF", 0); //DoF
+            PlayerPrefs.SetInt("AntiAliasing", 0); //AA
+            PlayerPrefs.SetInt("Particles", 0); //Particles
+            PlayerPrefs.SetInt("Lights", 0); //Lights*/
             PlayerPrefs.SetInt("ShowCoins", 1); //Show coins
             PlayerPrefs.SetInt("ShowProgressBar", 1); //Show progress bar
             PlayerPrefs.SetInt("ShowDeaths", 0); //Show deaths
-            PlayerPrefs.SetInt("AntiAliasing", 0); //AA
-            PlayerPrefs.SetInt("Particles", 0); //Particles
-            PlayerPrefs.SetInt("Lights", 0); //Lights
             PlayerPrefs.SetFloat("MasterVolume", 0f); //Master volume
             PlayerPrefs.SetFloat("MusicVolume", 0f); //Music volume
             PlayerPrefs.SetFloat("SfxVolume", 0f); //SFX volume
@@ -103,6 +104,8 @@ public class Settings : MonoBehaviour {
     //Preset
     public void Preset(int preset)
     {
+        PlayerPrefs.SetInt("Physics", 60); //Physics
+
         if (preset == 0) //Low
         {
             PostPreset(preset);

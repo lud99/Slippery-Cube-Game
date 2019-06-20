@@ -6,7 +6,8 @@ public class LoadScene : MonoBehaviour {
     Animator fade;
 
     //Start
-    void Start() {
+    void Start()
+    {
         gMScript = GameObject.Find("GameManager").GetComponent<GameManagerScript>();
         fade = GameObject.Find("Fade").GetComponent<Animator>();
     }
@@ -19,6 +20,18 @@ public class LoadScene : MonoBehaviour {
             if (gMScript.addCoinsDone) gMScript.LoadLevel(scene); //If all bonus coins are added
         }
         else gMScript.LoadLevel(scene);
+    }
+
+    //Load practice mode checkpoint
+    public void LoadCheckpoint()
+    {
+        GameObject.FindGameObjectWithTag("PracticeMode").GetComponent<PracticeMode>().LoadCheckpoint();
+    }
+
+    //Reset death in practice mode
+    public void ResetDeath()
+    {
+        GameObject.FindGameObjectWithTag("PracticeMode").GetComponent<PracticeMode>().ResetDeath();
     }
 
     //Begin loading selected scene async

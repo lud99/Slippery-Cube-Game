@@ -13,6 +13,11 @@ TagManager:
   - Cam Pad
   - Movement Pad
   - Activate Objects Pad
+  - Level Canvas
+  - GameManager
+  - PracticeMode
+  - LevelEdge
+  - Box
   layers:
   - Default
   - TransparentFX

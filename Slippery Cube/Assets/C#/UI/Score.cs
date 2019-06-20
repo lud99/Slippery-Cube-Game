@@ -4,25 +4,31 @@ using UnityEngine.UI;
 public class Score : MonoBehaviour {
 
     public GameObject fill, player;
+    public float endX;
+    public bool flip = false;
     Slider slider;
     float playerStart, playerCurrent, levelEnd;
 
     //Initialize variables
     public void Start()
     {
-        if (PlayerPrefs.GetInt("ShowProgressBar") == 0) this.gameObject.SetActive(false);
+        if (PlayerPrefs.GetInt("ShowProgressBar") == 0) gameObject.SetActive(false);
         if (player == null) player = GameObject.Find("Player");
         playerStart = player.transform.position.x;
         levelEnd = GameObject.Find("END Stop").transform.position.x;
+        if (endX == 0f) endX = levelEnd; 
         slider = GetComponent<Slider>();
-        //UpdateColor(); //Update progress bar color
+
+        slider.minValue = Mathf.Abs(endX) - 100;
+        slider.maxValue = endX != levelEnd ? levelEnd : playerStart;
     }
 
     //Update score text
     void Update () {
         playerCurrent = player.transform.position.x;
-        slider.value = -(playerCurrent - playerStart) / (playerStart - levelEnd);
-	}
+        slider.value = !flip ? (playerCurrent - playerStart) : playerCurrent;
+        //slider.value = negative ? -1 : 1 * (playerCurrent - playerStart) / (playerStart - levelEnd);
+    }
 
     //Update color to match player color
     public void UpdateColor()

@@ -3,7 +3,6 @@ using UnityEngine.UI;
 
 public class UnlockManager : MonoBehaviour
 {
-    public string[] names;
     GameObject unlockPopup;
     GameManagerScript gMScript;
     Animator anim;

@@ -9,9 +9,9 @@ public class DisableObjects : MonoBehaviour {
     public int disableRbDistanceInfront = 50, disableRbDistanceBehind = 10, pDistanceInfront = 30;
     public Rigidbody rb;
 
-    // Improve performance
-    void Start () {
-
+    //Improve performance
+    void Awake ()
+    {
         //Get components / objects
         player = GameObject.Find("Player");
         rend = GetComponent<MeshRenderer>();
@@ -38,6 +38,14 @@ public class DisableObjects : MonoBehaviour {
         {
             rend.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         } else if (rend != null) rend.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+    }
+
+    //Enable rigidbody
+    public void EnableRb()
+    {
+        //Activate Rigidbody
+        rb.detectCollisions = true;
+        rb.isKinematic = false;
     }
 
     //Update

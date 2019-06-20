@@ -12,11 +12,15 @@ public class GameManagerScript : MonoBehaviour {
     string level, savePath;
 
     public AsyncOperation asyncLoading;
-    public GameObject fade, completeLevelUI, coinText;
-    public bool completeLevelDone = true, addCoinsDone = true, loadNextLevel = true, checkNextLevel = true, checkEsc = true, checkSpace = true, saveOnLevelComplete = true, pressedSpace = false;
+    public GameObject fade, completeLevelUI, coinText, practiceModePrefab;
+    public GameObject[] practiceMode;
+    public bool completeLevelDone = true, addCoinsDone = true, loadNextLevel = true, checkNextLevel = true, 
+                checkEsc = true, checkSpace = true, saveOnLevelComplete = true, pressedSpace, allowPracticeMode = true;
     public float fogDensity = 0.02f;
     public int currentCoins, spentCoins;
     public string[] levels;
+
+    GameObject[] levelEdges;
     Animator fadeAnim;
     Music music;
 
@@ -29,13 +33,15 @@ public class GameManagerScript : MonoBehaviour {
         public bool[] levelDone = new bool[20], colorUnlocked = new bool[30], trailColorUnlocked = new bool[30], colorUsed = new bool[30], trailColorUsed = new bool[30];
     }
 
-    //Activate Fade
-    void Awake()
+    //Awake
+    public void Awake()
     {
         //Get objects
         if (coinText == null) coinText = GameObject.Find("CoinText");
         level = SceneManager.GetActiveScene().name;
-        music = GameObject.Find("Music").GetComponent<Music>();
+        practiceMode = GameObject.FindGameObjectsWithTag("PracticeMode");
+        levelEdges = GameObject.FindGameObjectsWithTag("LevelEdge");
+        if (GameObject.Find("Music") != null) music = GameObject.Find("Music").GetComponent<Music>();
         if (SceneManager.GetActiveScene().buildIndex > 1) sceneBuildIndex = SceneManager.GetActiveScene().buildIndex - 2;
         else sceneBuildIndex = SceneManager.GetActiveScene().buildIndex;
         savePath = Application.persistentDataPath + "/save.json";
@@ -54,21 +60,64 @@ public class GameManagerScript : MonoBehaviour {
             Data data = new Data();
             string json = JsonUtility.ToJson(data); //Convert data to json
             File.WriteAllText(savePath, json); //Write data to file
-            Debug.Log("Created new savefile");
+            Debug.Log("Created new savefile at '" + Application.persistentDataPath + "/save.json'");
             Restart(false);
         }
 
         //Game modes
         GameObject player = GameObject.Find("Player");
-        if (LoadJson().gamemode == 0)
+    }
+
+    //Start
+    void Start()
+    {
+        //Activate or disable practice mode
+        PracticeMode();
+    }
+
+    //Enabled or disable practice mode
+    public void PracticeMode()
+    {
+        if (allowPracticeMode)
         {
-            if (player != null) player.GetComponent<PracticeMode>().enabled = false; //Activate practice mode script
-        }
-        if (LoadJson().gamemode == 1)
+            int gamemode = LoadJson().gamemode;
+            Debug.Log("Gamemode: " + gamemode);
+
+            if (gamemode == 0)
+                DisablePracticeMode();
+
+            else if (gamemode == 1)
+            {
+                NewPracticeMode(false);
+
+                practiceMode[0].GetComponent<PracticeMode>().enabled = true; //Activate practice mode script
+                practiceMode[0].GetComponent<PracticeMode>().NewScene(levelEdges);
+            }
+        } else
         {
-            if (player != null) player.GetComponent<PracticeMode>().enabled = true; //Disable practice mode script
+            DisablePracticeMode();
         }
-        //CurrentCoins();
+
+        void DisablePracticeMode()
+        {
+            foreach (GameObject instance in practiceMode)
+            {
+                Destroy(instance);
+            }
+        }
+    }
+
+    //Create a new practice mode gameobject
+    public void NewPracticeMode(bool find = true)
+    {
+        int len = find ? practiceMode.Length : GameObject.FindGameObjectsWithTag("PracticeMode").Length;
+
+        if (len == 0)
+        {
+            practiceMode = new GameObject[1];
+            practiceMode[0] = Instantiate(practiceModePrefab, Vector3.zero, Quaternion.identity) as GameObject;
+            Debug.Log("Creating new practice mode");
+        }
     }
 
     //Update   
@@ -188,7 +237,8 @@ public class GameManagerScript : MonoBehaviour {
         {
             string json = File.ReadAllText(Application.persistentDataPath + "/save.json"); //Read from file
             return JsonUtility.FromJson<Data>(json); //Convert json to data and return it
-        } else if (!File.Exists(Application.persistentDataPath + "/save.json") || (File.Exists(Application.persistentDataPath + "/save.json") && new FileInfo(Application.persistentDataPath + "/save.json").Length == 0))
+        } else if (!File.Exists(Application.persistentDataPath + "/save.json") || (File.Exists(Application.persistentDataPath + "/save.json") 
+                    && new FileInfo(Application.persistentDataPath + "/save.json").Length == 0))
         {
             return new Data();
         }
@@ -212,6 +262,7 @@ public class GameManagerScript : MonoBehaviour {
     //Complete Level function
     public void CompleteLevel()
     {
+        Debug.Log("Completed Level. Coins: " + coinText.GetComponent<CoinText>().coins);
         if (!gameHasEnded)
         {
             //Start Complete Level animation
@@ -238,13 +289,23 @@ public class GameManagerScript : MonoBehaviour {
         {
             gameHasEnded = true;
 
-            StartCoroutine(BeginAsyncLoading(SceneManager.GetActiveScene().name, -1)); //Start loading selected scene async
+            if (LoadJson().gamemode != 1)
+            {
+                StartCoroutine(BeginAsyncLoading("", sceneBuildIndex + 2)); //Start loading selected scene async
 
-            //Increase total deaths by 1
-            SaveJson(sceneBuildIndex, -1, LoadJson().levelDeaths[sceneBuildIndex] + 1, LoadJson().localDeaths + 1, LoadJson().levelDone[sceneBuildIndex], -1, -1, -1, -1, -1); //Save
+                //Increase total deaths by 1
+                SaveJson(sceneBuildIndex, -1, LoadJson().levelDeaths[sceneBuildIndex] + 1, LoadJson().localDeaths + 1, LoadJson().levelDone[sceneBuildIndex], -1, -1, -1, -1, -1); //Save
 
-            //Activate FadeOut Trigger
-            fade.GetComponent<Animator>().SetTrigger("FadeOut");
+                //Activate FadeOut Trigger
+                fade.GetComponent<Animator>().enabled = true;
+                fade.GetComponent<Animator>().SetTrigger("FadeOut");
+            }
+            else
+            {
+                //Activate FadeOut Trigger
+                fade.GetComponent<Animator>().enabled = true;
+                fade.GetComponent<Animator>().SetTrigger("FadeOutPractice");
+            }
         }
     }
 
@@ -270,6 +331,7 @@ public class GameManagerScript : MonoBehaviour {
         if (sceneIndex != -1) asyncLoading = SceneManager.LoadSceneAsync(sceneIndex);
 
         asyncLoading.allowSceneActivation = false;
+        
         yield return asyncLoading;
     }
 
@@ -279,13 +341,16 @@ public class GameManagerScript : MonoBehaviour {
         GC.Collect(); //Clean garbage
 
         //If async loading is not done
-        if (asyncLoading.progress < 0.8)
+        if (asyncLoading != null)
         {
-            Debug.Log("Cannot load scene");
+            //Set to switch to async loaded scene
+            asyncLoading.allowSceneActivation = true;
         }
-
-        //Set to switch to async loaded scene
-        asyncLoading.allowSceneActivation = true;
+        else
+        {
+            Debug.Log("Cannot load scene async, loading normally instead");
+            LoadLevel(SceneManager.GetActiveScene().name);
+        }
     }
 
     //Load selected level (not async)
@@ -313,7 +378,15 @@ public class GameManagerScript : MonoBehaviour {
     //Space
     public void SpaceInput()
     {
-        if (!completeLevelUI.activeSelf && !completeLevelDone && !GameObject.Find("CustomizationCanvas")) //If level is not complete (quick restarting)
+        if (!checkSpace) return;
+
+        int gamemode = LoadJson().gamemode;
+
+        if (gamemode == 1 && allowPracticeMode)
+        {
+            practiceMode[0].GetComponent<PracticeMode>().LoadCheckpoint();
+        }
+        if (!completeLevelUI.activeSelf && !completeLevelDone && !GameObject.Find("CustomizationCanvas") && gamemode != 1) //If level is not complete (quick restarting)
         {
             //SaveJson(sceneBuildIndex, -1, LoadJson().levelDeaths[sceneBuildIndex] + 1, LoadJson().localDeaths + 1, LoadJson().levelDone[sceneBuildIndex], -1, -1, -1); //Save
             fadeAnim.SetTrigger("FadeOutShort");
@@ -344,7 +417,7 @@ public class GameManagerScript : MonoBehaviour {
                 //PlayerPrefs.SetString("ObjectToSelectOnStart", "World2"); //Set world 2 as selected on start
                 SaveJsonScrollbar(-1f, -1f, 0f); //Save scrollbar position so world 2 is visible
             }
-            PlayerPrefs.SetInt("LevelToUnlock", SceneManager.GetActiveScene().buildIndex - 1); //Save level which will be unlocked (next level)
+            PlayerPrefs.SetInt("LevelToUnlock", sceneBuildIndex + 1); //Save level which will be unlocked (next level)
         }
         music.playLevelMusicInMenu = true;
         AsyncLoading();
@@ -381,7 +454,7 @@ public class GameManagerScript : MonoBehaviour {
                 PlayerPrefs.SetInt("WorldToUnlock", 1); //Set to unlock world 2
                 SaveJsonScrollbar(-1f, -1f, 0f); //Save scrollbar position so world 2 is visible
             }
-            PlayerPrefs.SetInt("LevelToUnlock", SceneManager.GetActiveScene().buildIndex - 1); //Save level which will be unlocked (next level)
+            PlayerPrefs.SetInt("LevelToUnlock", sceneBuildIndex + 1); //Save level which will be unlocked (next level)
             music.playLevelMusicInMenu = false;
             LoadLevel("Customization");
         }

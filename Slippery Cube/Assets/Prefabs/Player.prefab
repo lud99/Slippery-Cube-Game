@@ -18,7 +18,6 @@ GameObject:
   - component: {fileID: 198480623620029288}
   - component: {fileID: 199052084995178496}
   - component: {fileID: 82366748147700068}
-  - component: {fileID: 114989560515070918}
   - component: {fileID: 561611889963445887}
   m_Layer: 0
   m_Name: Player
@@ -142,6 +141,7 @@ MonoBehaviour:
   camOffset: {x: 5, y: 1, z: 0}
   camForward: {x: 0, y: 0, z: 0}
   camRight: {x: 0, y: 0, z: 0}
+  originalPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &114776267737478344
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4976,18 +4976,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &114989560515070918
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1183241528789056}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48120d712e174c74bb5c3fac0950dd23, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!95 &561611889963445887
 Animator:
   serializedVersion: 3
@@ -5097,6 +5085,7 @@ MonoBehaviour:
   disableParticles: 0
   disableRbDistanceInfront: 50
   disableRbDistanceBehind: 10
+  pDistanceInfront: 30
   rb: {fileID: 0}
 --- !u!114 &544946419182069050
 MonoBehaviour:

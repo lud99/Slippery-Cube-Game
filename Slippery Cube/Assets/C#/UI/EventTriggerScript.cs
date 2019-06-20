@@ -1,12 +1,16 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class EventTriggerScript : MonoBehaviour, /*IPointerDownHandler, IPointerExitHandler, */ISelectHandler, IDeselectHandler
+public class EventTriggerScript : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler, IPointerEnterHandler, ISelectHandler, IDeselectHandler
 {
     public GameObject viewport;
-    public bool scrollX, scrollY;
+    public bool scrollX, scrollY, jumpBackAfterClick, jumpDefault = true;
     public int scrollAmount = 500;
+    public float jumpBackAfterClickTime;
     bool selected = false, doDeselectAnim = true;
+    EventSystem eventSystem;
     RectTransform rectTrans;
     UIAnimation anim;
 
@@ -14,6 +18,7 @@ public class EventTriggerScript : MonoBehaviour, /*IPointerDownHandler, IPointer
     void Start()
     {
         anim = GetComponent<UIAnimation>();
+        eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
         if (viewport != null) rectTrans = viewport.GetComponent<RectTransform>();
     }
     //Ignore deselect animation since it can cause objects to get stuck in an animation
@@ -21,23 +26,45 @@ public class EventTriggerScript : MonoBehaviour, /*IPointerDownHandler, IPointer
     {
         doDeselectAnim = false;
     }
-    /*/Detect mouse click
+    //Detect mouse click
     public void OnPointerDown(PointerEventData pointerEventData)
     {
+        if (jumpDefault)
+            anim.UIJumpDefault(true);
+
+        selected = true;
+    }
+    //Detect mouse click
+    public void OnPointerUp(PointerEventData pointerEventData)
+    {
+        if (selected)
+        { 
+            GetComponent<Button>().onClick.Invoke();
+            if (jumpBackAfterClick)
+                StartCoroutine(OnSelectWait(jumpBackAfterClickTime));
+        }
+    }
+    //Mouse select
+    public void OnPointerEnter(PointerEventData pointerEventData)
+    {
         anim.UIJump(true);
-    }*/
-    /*/Mouse exit
+
+        selected = true;
+        eventSystem.SetSelectedGameObject(gameObject);
+    }
+    //Mouse exit
     public void OnPointerExit(PointerEventData eventData)
     {
         anim.UIJumpBack(true);
-    }*/
+
+        selected = false;
+    }
     //Detect if selected
-    public void OnSelect(BaseEventData eventData)
+    public void OnSelect(BaseEventData eventData = null)
     {
         if (anim != null)
-        {
             anim.UIJump(true);
-        }
+
         selected = true;
         doDeselectAnim = true;
     }
@@ -45,8 +72,16 @@ public class EventTriggerScript : MonoBehaviour, /*IPointerDownHandler, IPointer
     public void OnDeselect(BaseEventData eventData)
     {
         if (doDeselectAnim) anim.UIJumpBackSmall();
+
         selected = false;
     }
+    //Wait
+    IEnumerator OnSelectWait(float time)
+    {
+        yield return new WaitForSeconds(time);
+        if (selected) OnSelect();
+    }
+
     //Update
     void Update()
     {

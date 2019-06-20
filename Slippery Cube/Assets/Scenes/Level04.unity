@@ -794,31 +794,6 @@ PrefabInstance:
       propertyPath: camLow
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 224702237473183156, guid: d16787e846833cd4c93844eaec89e244,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 170.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 224702237473183156, guid: d16787e846833cd4c93844eaec89e244,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 35.58
-      objectReference: {fileID: 0}
-    - target: {fileID: 224702237473183156, guid: d16787e846833cd4c93844eaec89e244,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0.000011683
-      objectReference: {fileID: 0}
-    - target: {fileID: 224702237473183156, guid: d16787e846833cd4c93844eaec89e244,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 228.65
-      objectReference: {fileID: 0}
-    - target: {fileID: 114716861730808070, guid: d16787e846833cd4c93844eaec89e244,
-        type: 3}
-      propertyPath: m_Text
-      value: Coins are optional
-      objectReference: {fileID: 0}
     - target: {fileID: 224228729684941268, guid: d16787e846833cd4c93844eaec89e244,
         type: 3}
       propertyPath: m_RootOrder
@@ -943,6 +918,31 @@ PrefabInstance:
         type: 3}
       propertyPath: camLow
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 224702237473183156, guid: d16787e846833cd4c93844eaec89e244,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 170.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 224702237473183156, guid: d16787e846833cd4c93844eaec89e244,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 35.58
+      objectReference: {fileID: 0}
+    - target: {fileID: 224702237473183156, guid: d16787e846833cd4c93844eaec89e244,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.000011683
+      objectReference: {fileID: 0}
+    - target: {fileID: 224702237473183156, guid: d16787e846833cd4c93844eaec89e244,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 228.65
+      objectReference: {fileID: 0}
+    - target: {fileID: 114716861730808070, guid: d16787e846833cd4c93844eaec89e244,
+        type: 3}
+      propertyPath: m_Text
+      value: Coins are optional
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d16787e846833cd4c93844eaec89e244, type: 3}
@@ -3221,6 +3221,7 @@ MonoBehaviour:
   disableParticles: 0
   disableRbDistanceInfront: 50
   disableRbDistanceBehind: 10
+  pDistanceInfront: 30
   rb: {fileID: 0}
 --- !u!4 &1787528487 stripped
 Transform:

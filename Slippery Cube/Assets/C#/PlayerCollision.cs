@@ -15,7 +15,6 @@ public class PlayerCollision : MonoBehaviour
         if (collisionInfo.collider.tag == "Obstacle")
         {
             movement.enabled = false; //Disable movement
-            GetComponent<PracticeMode>().enabled = false; //Disable practice mode
             GameObject.Find("GameManager").GetComponent<GameManagerScript>().EndGame(); //End game
         }
     }
@@ -37,7 +36,12 @@ public class PlayerCollision : MonoBehaviour
             case "Obstacle": //Death trigger
                 {
                     movement.enabled = false; //Disable movement
-                    GetComponent<PracticeMode>().enabled = false; //Disable practice mode
+                    FindObjectOfType<GameManagerScript>().EndGame(); //Restart Scene
+                    break;
+                }
+            case "LevelEdge": //Death trigger
+                {
+                    movement.enabled = false; //Disable movement
                     FindObjectOfType<GameManagerScript>().EndGame(); //Restart Scene
                     break;
                 }
