@@ -7,7 +7,7 @@ public class Score : MonoBehaviour {
     public float endX;
     public bool flip = false;
     Slider slider;
-    float playerStart, playerCurrent, levelEnd;
+    float playerStart, playerCurrent, levelEnd, minOffset;
 
     //Initialize variables
     public void Start()
@@ -16,17 +16,27 @@ public class Score : MonoBehaviour {
         if (player == null) player = GameObject.Find("Player");
         playerStart = player.transform.position.x;
         levelEnd = GameObject.Find("END Stop").transform.position.x;
-        if (endX == 0f) endX = levelEnd; 
+        if (endX == 0f) endX = levelEnd;
+        //minOffset = Mathf.Abs(endX);
+        minOffset = Mathf.Abs(playerStart);
+
         slider = GetComponent<Slider>();
 
-        slider.minValue = Mathf.Abs(endX) - 100;
-        slider.maxValue = endX != levelEnd ? levelEnd : playerStart;
+        slider.minValue = 0;
+        slider.maxValue = endX != levelEnd ? Mathf.Abs(endX) + minOffset : playerStart + minOffset;
     }
 
-    //Update score text
+    //Update progress bar value
     void Update () {
-        playerCurrent = player.transform.position.x;
-        slider.value = !flip ? (playerCurrent - playerStart) : playerCurrent;
+        playerCurrent = CurrentPlayerX();
+
+        if (flip)
+        {
+            minOffset = Mathf.Abs(playerStart);
+
+            //slider.maxValue = endX != levelEnd ? Mathf.Abs(endX) + minOffset : playerStart + minOffset;
+        }
+        slider.value = !flip ? playerStart - playerCurrent : playerCurrent;
         //slider.value = negative ? -1 : 1 * (playerCurrent - playerStart) / (playerStart - levelEnd);
     }
 
@@ -37,6 +47,43 @@ public class Score : MonoBehaviour {
         Material playerMat = player.GetComponent<Renderer>().material;
         fill.GetComponent<Animator>().enabled = false;
         fill.GetComponent<Image>().color = new Color(playerMat.color.r, playerMat.color.g, playerMat.color.b, 1f);
+    }
+
+    //Flip
+    public void Flip()
+    {
+        playerStart = CurrentPlayerX();
+
+        slider.maxValue = /*endX != levelEnd ? */Mathf.Abs(endX);// + minOffset; playerStart + minOffset;
+        flip = !flip;
+    }
+
+    //Flip (new endX)
+    public void Flip(float newEndX)
+    {
+        endX = newEndX;
+        playerStart = CurrentPlayerX();
+
+        slider.maxValue = endX != levelEnd ? Mathf.Abs(endX) + minOffset : playerStart + minOffset;
+        flip = !flip;
+    }
+
+    //Set endX to the specified position
+    public void SetEnd(float end)
+    {
+        endX = end;
+    }
+
+    //Set endX to the Level Stop object's x
+    public void SetEndToLevelEnd()
+    {
+        endX = levelEnd;
+    }
+
+    //Get player's current x position
+    float CurrentPlayerX()
+    {
+        return player.transform.position.x;
     }
 }
  

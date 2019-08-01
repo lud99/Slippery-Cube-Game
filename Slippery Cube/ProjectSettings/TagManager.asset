@@ -18,6 +18,7 @@ TagManager:
   - PracticeMode
   - LevelEdge
   - Box
+  - ProgressBar
   layers:
   - Default
   - TransparentFX

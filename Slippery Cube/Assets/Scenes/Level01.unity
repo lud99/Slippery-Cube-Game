@@ -337,7 +337,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114907020438640046, guid: 2a14005f448bec04a897de83ef63069b,
+    - target: {fileID: 5996286148816592209, guid: 2a14005f448bec04a897de83ef63069b,
+        type: 3}
+      propertyPath: antialiasingMode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5996286148816592209, guid: 2a14005f448bec04a897de83ef63069b,
         type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -352,12 +357,7 @@ PrefabInstance:
       propertyPath: m_OcclusionCulling
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5996286148816592209, guid: 2a14005f448bec04a897de83ef63069b,
-        type: 3}
-      propertyPath: antialiasingMode
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5996286148816592209, guid: 2a14005f448bec04a897de83ef63069b,
+    - target: {fileID: 114907020438640046, guid: 2a14005f448bec04a897de83ef63069b,
         type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -1040,6 +1040,11 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5940647397595287007, guid: 0cc7c2e2a76863947970449f114cbd82,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7788231797650137562, guid: 0cc7c2e2a76863947970449f114cbd82,
         type: 3}
       propertyPath: progressBar
@@ -1050,11 +1055,6 @@ PrefabInstance:
       propertyPath: fill
       value: 
       objectReference: {fileID: 1491044330}
-    - target: {fileID: 5940647397595287007, guid: 0cc7c2e2a76863947970449f114cbd82,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0cc7c2e2a76863947970449f114cbd82, type: 3}
 --- !u!1001 &1018609735
@@ -1481,6 +1481,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 1348747111975166, guid: d16787e846833cd4c93844eaec89e244, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 224152078641200504, guid: d16787e846833cd4c93844eaec89e244,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1591,10 +1595,6 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1348747111975166, guid: d16787e846833cd4c93844eaec89e244, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6318234578926235103, guid: d16787e846833cd4c93844eaec89e244,
         type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -1624,6 +1624,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Text
       value: Purple
+      objectReference: {fileID: 0}
+    - target: {fileID: 114572543032584072, guid: d16787e846833cd4c93844eaec89e244,
+        type: 3}
+      propertyPath: m_Text
+      value: LEVEL 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d16787e846833cd4c93844eaec89e244, type: 3}

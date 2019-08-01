@@ -14,16 +14,22 @@ public class UnlockManager : MonoBehaviour
     {
         gMScript = GetComponent<GameManagerScript>(); //Get game manager script
         unlockPopup = GameObject.Find("UnlockPopup"); //Get popup object
-        unlockPopup.SetActive(false); //Deactivate popup
-        anim = unlockPopup.GetComponent<Animator>(); //Get popup animator
-        unlockName = unlockPopup.transform.GetChild(0).GetComponent<Text>(); //Get popup name text
-        unlockText = unlockPopup.transform.GetChild(1).GetComponent<Text>(); //Get popup unlocked text
-        unlockImage = unlockPopup.transform.GetChild(2).GetComponent<Image>(); //Get popup image
+
+        if (unlockPopup != null)
+        {
+            unlockPopup.SetActive(false); //Deactivate popup
+            anim = unlockPopup.GetComponent<Animator>(); //Get popup animator
+            unlockName = unlockPopup.transform.GetChild(0).GetComponent<Text>(); //Get popup name text
+            unlockText = unlockPopup.transform.GetChild(1).GetComponent<Text>(); //Get popup unlocked text
+            unlockImage = unlockPopup.transform.GetChild(2).GetComponent<Image>(); //Get popup image
+        }
     }
 
     //Update
     void Update()
     {
+        if (anim == null) return;
+
         //Load data
         GameManagerScript.Data data = gMScript.LoadJson();
 

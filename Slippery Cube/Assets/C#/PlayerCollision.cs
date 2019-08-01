@@ -4,9 +4,14 @@ public class PlayerCollision : MonoBehaviour
 {
     public PlayerMovement movement;
     GameManagerScript gMScript;
+    Score progressBar;
 
     //Get game manager
-    void Start() { gMScript = GameObject.Find("GameManager").GetComponent<GameManagerScript>(); }
+    void Start()
+    {
+        gMScript = GameObject.Find("GameManager").GetComponent<GameManagerScript>();
+        progressBar = GameObject.FindGameObjectWithTag("ProgressBar").GetComponent<Score>();
+    }
 
     //When colliding with something
     void OnCollisionEnter(Collision collisionInfo)
@@ -70,18 +75,33 @@ public class PlayerCollision : MonoBehaviour
                 }
             case "Cam Pad": //Change Camera Offset
                 {
+                    //Get components
                     Pad pad = other.GetComponent<Pad>(); //Get pad
                     FollowPlayer followPlayer = Camera.main.GetComponent<FollowPlayer>(); //Get follow player
+
+                    //Camera
                     followPlayer.offset = pad.offset; //Change camera offset
                     followPlayer.targetRotation = Quaternion.Euler(pad.cameraRotX, pad.cameraRotY, pad.cameraRotZ); //Set camera target rotation
                     followPlayer.rotate = pad.rotateCam; //Set camera to rotate
                     followPlayer.camForward = pad.camForward;
                     followPlayer.camRight = pad.camRight;
+
+                    //Change player light position
                     float lightX = 0f, lightY = 0f, lightZ = 0f;
                     if (pad.changeLightX) lightX = pad.offset.x;
                     if (pad.changeLightY) lightY = pad.offset.y;
                     if (pad.changeLightZ) lightZ = pad.offset.z;
+                    //Apply
                     gameObject.transform.GetChild(0).transform.localPosition = new Vector3(lightX, lightY, lightZ);
+
+                    //Change progress bar end position
+                    if (pad.progressBarNewEndDefault) //Set new position to End Stop's position
+                        progressBar.SetEndToLevelEnd();
+                    if (pad.progressBarNewEndCustom != 0f) //Set new position to End Stop's position
+                        progressBar.SetEnd(pad.progressBarNewEndCustom);
+                    if (pad.flipProgressBar)
+                        progressBar.Flip();
+
                     break;
                 }
             case "Activate Objects Pad": //Activate / Deactivate objects

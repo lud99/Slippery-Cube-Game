@@ -37,7 +37,10 @@ public class LoadScene : MonoBehaviour {
     //Begin loading selected scene async
     public void BeginAsyncLoading(string scene, int sceneIndex)
     {
-        StartCoroutine(gMScript.BeginAsyncLoading(scene, sceneIndex)); //Begin loading selected scene async
+        if (scene != "")
+            StartCoroutine(gMScript.BeginAsyncLoading(scene)); //Begin loading selected scene async with scene name
+        else if (sceneIndex >= 0)
+            StartCoroutine(gMScript.BeginAsyncLoading(sceneIndex)); //Begin loading selected scene async with scene indez
     }
 
     //Load selected scene async without removing local deaths

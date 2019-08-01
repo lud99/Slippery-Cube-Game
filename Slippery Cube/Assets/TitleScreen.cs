@@ -87,9 +87,15 @@ public class TitleScreen : MonoBehaviour
         lvlGameManager.checkEsc = false;
         lvlGameManager.checkSpace = false;
         lvlGameManager.allowPracticeMode = false;
-        Destroy(lvlGameManager.practiceMode[0].GetComponent<PracticeMode>().checkpointObjects[0]);
+        DestroyCheckpoint(0);
         lvlGameManager.PracticeMode();
-
+        Debug.Log("loading complete");
         StartCoroutine(BeginAsyncLoading(levelToLoad, LoadSceneMode.Single, false, false));
+    }
+
+    void DestroyCheckpoint(int index)
+    {
+        if (lvlGameManager.practiceMode.Length > 0)
+            lvlGameManager.practiceMode[0].GetComponent<PracticeMode>().DestroyCheckpoint(index);
     }
 }

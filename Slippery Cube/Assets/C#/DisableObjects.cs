@@ -73,12 +73,12 @@ public class DisableObjects : MonoBehaviour {
             if (transform.position.x > player.transform.position.x - pDistanceInfront) //Infront of Player
             {
                 //Play particles
-                if (!parSys.isPlaying) parSys.Play();
+                if (parSys != null && !parSys.isPlaying) parSys.Play();
             }
             if (transform.position.x > player.transform.position.x + 10) //Behind player
             {
                 //Stop particles
-                if (parSys.isPlaying) parSys.Stop();
+                if (parSys != null && parSys.isPlaying) parSys.Stop();
             }
         }
     }

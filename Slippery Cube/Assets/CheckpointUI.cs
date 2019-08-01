@@ -7,7 +7,10 @@ public class CheckpointUI : MonoBehaviour
     //Start
     void Start()
     {
-        practice = GameObject.FindGameObjectWithTag("PracticeMode").GetComponent<PracticeMode>();
+        GameObject practiceObject = GameObject.FindGameObjectWithTag("PracticeMode");
+
+        if (practiceObject != null)
+            practice = practiceObject.GetComponent<PracticeMode>();
     }
 
     //Save checkpoint

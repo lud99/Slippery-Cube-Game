@@ -176,7 +176,7 @@ public class PracticeMode : MonoBehaviour {
 
         //Remove the previous checkpoint
         checkpoints.RemoveAt(checkpoints.Count - 1); //Checkpoint data
-        GameObject.Destroy(checkpointObjects[checkpointObjects.Count - 1]); //Destroy checkpoint object
+        Destroy(checkpointObjects[checkpointObjects.Count - 1]); //Destroy checkpoint object
         checkpointObjects.RemoveAt(checkpointObjects.Count - 1); //Remove checkpoint object from the list
         Debug.Log("Deleted Checkpoint");
     }
@@ -263,5 +263,29 @@ public class PracticeMode : MonoBehaviour {
         rb.constraints = RigidbodyConstraints.None;
 
         Debug.Log("Loaded Checkpoint");
+    }
+
+    //Destroy checkpoint object
+    public void DestroyCheckpoint(int index)
+    {
+        //If checkpoint object exists
+        if (checkpointObjects[index] != null)
+        {
+            checkpoints.RemoveAt(index); //Checkpoint data
+            Destroy(checkpointObjects[index]); //Destroy checkpoint object
+            checkpointObjects.RemoveAt(index); //Remove checkpoint object from the list
+        }
+    }
+
+    //Destroy all checkpoint objects
+    public void DestroyAllCheckpoints()
+    {
+        //Loop through all checkpoints
+        for (int i = 0; i < checkpoints.Count; i++)
+        {
+            checkpoints.RemoveAt(i); //Checkpoint data
+            Destroy(checkpointObjects[i]); //Destroy checkpoint object
+            checkpointObjects.RemoveAt(i); //Remove checkpoint object from the list
+        }
     }
 }

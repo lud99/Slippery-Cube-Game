@@ -58,8 +58,15 @@ public class LevelUI : MonoBehaviour {
         //If no levels is currently loading
         if (gMScript.asyncLoading == null && !lockPar.activeSelf && !viewport.GetComponent<Animator>().GetBool("WorldLevelsTransition"))
         {
-            StartCoroutine(gMScript.BeginAsyncLoading(levelsToLoad[level], -1));
-            GameObject.Find("Fade").GetComponent<Animator>().SetTrigger("FadeOutShortLoadScene");
+            print("Loading level");
+            StartCoroutine(gMScript.BeginAsyncLoading(levelsToLoad[level], LoadingCallback));
+            //GameObject.Find("Fade").GetComponent<Animator>().SetTrigger("FadeOutShortLoadScene");
+
+            void LoadingCallback()
+            {
+                print("DONE");
+                GameObject.Find("Fade").GetComponent<Animator>().SetTrigger("FadeOutShortLoadScene");
+            }
         }
     }
 }

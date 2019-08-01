@@ -11,6 +11,7 @@ public class GameManagerScript : MonoBehaviour {
     public int coins, sceneBuildIndex;
     string level, savePath;
 
+    public delegate void AsyncLoadingCallback();
     public AsyncOperation asyncLoading;
     public GameObject fade, completeLevelUI, coinText, practiceModePrefab;
     public GameObject[] practiceMode;
@@ -269,7 +270,7 @@ public class GameManagerScript : MonoBehaviour {
             completeLevelUI.SetActive(true);
 
             //Start loading current level and next level
-            if (loadNextLevel) StartCoroutine(BeginAsyncLoading("LevelSelect", -1));
+            if (loadNextLevel) StartCoroutine(BeginAsyncLoading("LevelSelect"));
 
             //Update save variables
             coins = coinText.GetComponent<CoinText>().coins;
@@ -291,7 +292,7 @@ public class GameManagerScript : MonoBehaviour {
 
             if (LoadJson().gamemode != 1)
             {
-                StartCoroutine(BeginAsyncLoading("", sceneBuildIndex + 2)); //Start loading selected scene async
+                StartCoroutine(BeginAsyncLoading(sceneBuildIndex + 2)); //Start loading selected scene async
 
                 //Increase total deaths by 1
                 SaveJson(sceneBuildIndex, -1, LoadJson().levelDeaths[sceneBuildIndex] + 1, LoadJson().localDeaths + 1, LoadJson().levelDone[sceneBuildIndex], -1, -1, -1, -1, -1); //Save
@@ -322,17 +323,45 @@ public class GameManagerScript : MonoBehaviour {
     }
 
     //Load selected scene ahead of time
-    public IEnumerator BeginAsyncLoading(string scene, int sceneIndex)
+    public IEnumerator BeginAsyncLoading(int scene, AsyncLoadingCallback loadingCallback = null)
     {   
-        //Load scene by string
-        if (scene != "") asyncLoading = SceneManager.LoadSceneAsync(scene);
-
         //Load scene by build index
-        if (sceneIndex != -1) asyncLoading = SceneManager.LoadSceneAsync(sceneIndex);
+        asyncLoading = SceneManager.LoadSceneAsync(scene);
 
         asyncLoading.allowSceneActivation = false;
-        
-        yield return asyncLoading;
+
+        while(asyncLoading.progress <= 1f)
+        {
+            //Run if a callback has been provided
+            if (asyncLoading.progress >= 0.9f && loadingCallback != null)
+            {
+                Debug.Log("Loading scene with build index '" + scene + "' is completed");
+                loadingCallback();
+            }
+            
+            yield return null;
+        }
+    }
+
+    //Load selected scene ahead of time
+    public IEnumerator BeginAsyncLoading(string scene, AsyncLoadingCallback loadingCallback = null)
+    {
+        //Load scene by string
+        asyncLoading = SceneManager.LoadSceneAsync(scene);
+
+        asyncLoading.allowSceneActivation = false;
+
+        while (asyncLoading.progress <= 1f)
+        {
+            //Run if a callback has been provided
+            if (asyncLoading.progress >= 0.9f && loadingCallback != null)
+            {
+                print("Loading scene '" + scene + "' is completed");
+                loadingCallback();
+            }
+
+            yield return null;
+        }
     }
 
     //Load selected scene

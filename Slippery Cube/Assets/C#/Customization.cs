@@ -93,14 +93,17 @@ public class Customization : MonoBehaviour
         //Only execute if player trail exists
         if (trailRender != null)
         {
-            //Reset animations
-            trailAnim.Rebind();
-
             trailRender.material = playerMats[materialIndex]; //Set player's material to selected one from array
             gMScript.SaveJsonTrail(materialIndex, materialIndex, -1f, true, true); //Save selected outfit
 
             //'Restart' Trail to update material
-            trailAnim.enabled = false;
+            //Reset animations
+            if (trailAnim != null)
+            {
+                trailAnim.Rebind();
+                trailAnim.enabled = false;
+            }
+
             trail.gameObject.SetActive(false);
             trail.gameObject.SetActive(true);
 
